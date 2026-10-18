@@ -2,7 +2,7 @@
 
 # 海棠文档工坊（Crabapple DocStudio）
 
-> 品牌色：海棠红 `#B3123B` · 海棠粉 `#E63B5F` · 叶绿 `#4F9D69`
+> 品牌色：海棠红 `#B3123B` · 海棠粉 `#E63B5F` · 深红 `#8E0E2E`
 
 [![License](https://img.shields.io/badge/License-AGPL--3.0-C9184A?style=flat-square)](LICENSE)
 ![Python](https://img.shields.io/badge/Python-3.11-C9184A?style=flat-square&logo=python&logoColor=white)
