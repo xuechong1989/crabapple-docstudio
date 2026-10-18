@@ -29,7 +29,7 @@ body:
     id: version
     attributes:
       label: 版本 / 提交
-      placeholder: v0.4.0 / commit abc123
+      placeholder: 3.4.0 / commit abc123
     validations:
       required: true
   - type: input
