@@ -182,7 +182,7 @@ python scripts/hash_password.py
 | `DOCSTUDIO_ADMIN_PASSWORD` | 首次启动 admin 口令 |
 | `DOCSTUDIO_AUTH_HASH` | 旧版兼容登录口令哈希 |
 | `DOCSTUDIO_CORS_ORIGINS` | 允许的跨域来源，逗号分隔 |
-| `DOCSTUDIO_MONGODB_KEY` | 可选 form-in 云盘加密密钥；默认关闭 |
+| `DOCSTUDIO_MONGODB_KEY` | 可选 MongoDB 云盘加密密钥；默认关闭 |
 
 GPU 示例：
 
