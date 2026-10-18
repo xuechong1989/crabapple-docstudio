@@ -49,7 +49,7 @@ py-cpuinfo>=8.0.0,<10.0.0
 # xuechong 2026-08-17 研发BUG-0023-图档扫描-3.1.04-一键修图HoughLinesP解包异常 依赖大版本漂移防护：
 # doclayout-yolo 的无上限依赖会在重建 venv 时解析到最新大版本（opencv-python 5.0 覆盖 cv2 后
 # HoughLinesP 返回结构变更导致一键修图崩溃），显式声明传递依赖并锁上限，两处 opencv 同为 4.x 消除双大版本混装
-albumentations>=1.4.11,<3.0.0
+albumentations>=2.0.8,<3.0.0
 albucore>=0.0.24,<1.0.0
 opencv-python>=4.6.0,<5.0.0
 # xuechong 2026-08-17 crabapple-docstudio Windows约束：stringzilla（doclayout-yolo→albumentations→albucore 链传递依赖）
