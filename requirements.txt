@@ -64,7 +64,7 @@ fastapi>=0.110.0,<1.0.0
 # app.py 直接 import starlette（StaticFiles/HTTPException），版本不应完全由 fastapi 间接决定，显式锁定大版本
 starlette>=1.0.0,<2.0.0
 uvicorn[standard]>=0.29.0,<1.0.0
-python-multipart>=0.0.9,<1.0.0
+python-multipart>=0.0.32,<1.0.0
 watchdog>=4.0.0,<7.0.0
 websockets>=12.0,<16.0
 aiofiles>=23.0.0,<26.0.0
