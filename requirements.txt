@@ -51,7 +51,7 @@ py-cpuinfo>=8.0.0,<10.0.0
 # HoughLinesP 返回结构变更导致一键修图崩溃），显式声明传递依赖并锁上限，两处 opencv 同为 4.x 消除双大版本混装
 albumentations>=1.4.11,<3.0.0
 albucore>=0.0.24,<1.0.0
-opencv-python>=4.6.0,<5.0.0
+opencv-python>=5.0.0.93,<6.0.0
 # xuechong 2026-08-17 crabapple-docstudio Windows约束：stringzilla（doclayout-yolo→albumentations→albucore 链传递依赖）
 # 5.1.2+ 无 cp311 win_amd64 预编译 wheel，pip 源码编译需 MSVC Build Tools；5.1.1 双平台均有 wheel，全局钉死保证环境可复现
 stringzilla==5.1.1
