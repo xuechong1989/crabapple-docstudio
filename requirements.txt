@@ -59,7 +59,7 @@ stringzilla==5.1.1
 # ============================================================
 # Web service dependencies
 # ============================================================
-fastapi>=0.110.0,<1.0.0
+fastapi>=0.143.1,<1.0.0
 # xuechong 2026-08-17 研发BUG-0023-图档扫描-3.1.04-一键修图HoughLinesP解包异常 依赖加固补充：
 # app.py 直接 import starlette（StaticFiles/HTTPException），版本不应完全由 fastapi 间接决定，显式锁定大版本
 starlette>=1.0.0,<2.0.0
