@@ -326,7 +326,7 @@ const elapsedText = computed(() => {
   background: linear-gradient(180deg, #C9184A 0%, #B3123B 55%, #8E0E2E 100%);
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   color: #fff;
-  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 6px rgba(179,18,59, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 .upload-modal-btn-primary:hover {
   background: linear-gradient(180deg, #E63B5F 0%, #B3123B 55%, #8E0E2E 100%);

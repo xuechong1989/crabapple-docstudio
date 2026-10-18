@@ -192,13 +192,13 @@ function formatTime(iso) {
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 6px rgba(179,18,59, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transition: all 0.15s ease;
 }
 .utm-resume:hover {
   background: linear-gradient(180deg, #E63B5F 0%, #B3123B 55%, #8E0E2E 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 10px rgba(179,18,59, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 /* xuechong 2026-10-11 研发BUG-0073 修图锁定：一键修图/批量修图进行中禁用态灰化 */
 .utm-resume:disabled {

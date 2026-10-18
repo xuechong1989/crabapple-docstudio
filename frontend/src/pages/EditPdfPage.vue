@@ -2432,7 +2432,7 @@ onUnmounted(() => {
 
 .edit-pdf-page .pdf-file-item.selected {
   /* xuechong 2026-10-09 研发BUG-0071 选中色并入主色（原旧橙 rgba(232,97,0)），与文件树选中一致 */
-  background: rgba(234, 88, 12, 0.08);
+  background: rgba(179,18,59, 0.08);
   border-color: var(--primary-color);
 }
 

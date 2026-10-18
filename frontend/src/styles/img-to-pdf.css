@@ -9,7 +9,7 @@
   flex-direction: column;
   height: 100dvh;
   background:
-    radial-gradient(ellipse 900px 500px at 12% 0%, rgba(234, 88, 12, 0.06), transparent 60%),
+    radial-gradient(ellipse 900px 500px at 12% 0%, rgba(179,18,59, 0.06), transparent 60%),
     radial-gradient(ellipse 800px 500px at 88% 100%, rgba(37, 99, 235, 0.05), transparent 60%),
     linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%);
   overflow: hidden;
@@ -132,7 +132,7 @@
   cursor: pointer;
 }
 .itp-step.clickable:hover .itp-step-icon {
-  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.45);
+  box-shadow: 0 0 0 2px rgba(179,18,59, 0.45);
 }
 .itp-step-icon {
   width: 32px;
@@ -158,7 +158,7 @@
 .itp-step.active .itp-step-icon {
   background-color: var(--primary-color);
   color: #fff;
-  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.25);
+  box-shadow: 0 0 0 4px rgba(179,18,59, 0.25);
 }
 .itp-step.active .itp-step-text {
   color: var(--primary-dark);
@@ -179,7 +179,7 @@
 .itp-step.completed .itp-step-icon {
   background-color: var(--primary-light-bg);
   color: var(--primary-color);
-  border: 1px solid rgba(234, 88, 12, 0.35);
+  border: 1px solid rgba(179,18,59, 0.35);
 }
 .itp-step-tip {
   display: none;
@@ -1461,7 +1461,7 @@
 .itp-btn-orange-light {
   background-color: var(--primary-light-bg);
   color: var(--primary-color);
-  border: 1px solid rgba(234, 88, 12, 0.3);
+  border: 1px solid rgba(179,18,59, 0.3);
 }
 
 /* 进度条通用 */
@@ -1539,11 +1539,11 @@
   color: #fff;
   cursor: pointer;
   background: linear-gradient(180deg, #C9184A 0%, var(--primary-color) 55%, #8E0E2E 100%);
-  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 6px rgba(179,18,59, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transition: all 0.2s;
 }
 .itp-mode-select:hover {
-  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 10px rgba(179,18,59, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 /* xuechong 2026-10-11 研发BUG-0073-图档扫描-3.3.02-图片转PDF模块漏光净化质量优化
    处理期间模式下拉禁用态（与上传按钮 .itp-upload-label.disabled 同口径） */
@@ -1577,7 +1577,7 @@
   right: -5px;
   bottom: -5px;
   border-radius: 50%;
-  border: 2px solid rgba(234, 88, 12, 0.18);
+  border: 2px solid rgba(179,18,59, 0.18);
   border-top-color: #C9184A;
   border-right-color: rgba(242, 107, 29, 0.55);
   animation: itp-step-spin 0.9s linear infinite;
