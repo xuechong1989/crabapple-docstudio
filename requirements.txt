@@ -125,4 +125,4 @@ psutil>=5.9.0,<7.0.0
 # pymongo = MongoDB 云盘存储；pycryptodome = 分块 AES 加密
 # ============================================================
 pymongo>=3.13.0,<4.0.0
-pycryptodome>=3.20.0,<4.0.0
+pycryptodome>=4.0.0,<5.0.0
