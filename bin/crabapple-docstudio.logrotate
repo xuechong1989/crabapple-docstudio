@@ -1,0 +1,21 @@
+# crabapple-docstudio 日志轮转配置（REQ-017 备选方案）
+#
+# 部署方式：
+#   sudo cp bin/crabapple-docstudio.logrotate /etc/logrotate.d/crabapple-docstudio
+#   sudo logrotate -d /etc/logrotate.d/crabapple-docstudio    # 测试（dry-run）
+#   sudo logrotate -f /etc/logrotate.d/crabapple-docstudio    # 强制轮转
+#
+# 注意：server.py 已内置 _RotatingLogFile（500MB/份 x 10份自动轮转）。
+#       若代码内轮转已启用，通常无需再配置此文件。
+#       此文件适用于：代码内轮转被禁用、或运维 shell 重定向产生额外日志文件的场景。
+
+/data/crabapple-docstudio/logs/crabapple-docstudio.log {
+    daily
+    maxsize 500M
+    rotate 10
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+}

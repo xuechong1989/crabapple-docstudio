@@ -1,0 +1,132 @@
+[build-system]
+requires = ["setuptools>=75.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crabapple-docstudio"
+version = "3.4.0"
+description = "海棠文档工坊 — 智能文档扫描与 AI 处理工作台"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.11"
+authors = [
+    {name = "Crabapple DocStudio contributors"}
+]
+keywords = ["document-scanning", "ocr", "pdf", "image-processing", "yolo", "agpl"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+]
+
+[project.urls]
+Homepage = "https://github.com/xuechong1989/crabapple-docstudio"
+Source = "https://github.com/xuechong1989/crabapple-docstudio"
+
+# Core dependencies (keep in sync with requirements.txt)
+dependencies = [
+    # Core
+    "opencv-python-headless>=4.10.0,<5.0.0",
+    "numpy>=1.26.0,<2.3.0",
+    "Pillow>=10.3.0,<12.0.0",
+    # PyTorch (YOLO)
+    "torch>=2.8.0,<2.10.0",
+    "torchvision>=0.23.0,<0.25.0",
+    # YOLO + transitive deps
+    "doclayout-yolo>=0.0.2,<1.0.0",
+    "ultralytics>=8.2.0,<9.0.0",
+    "huggingface_hub>=0.23.0,<1.0.0",
+    "safetensors>=0.4.0,<1.0.0",
+    "ultralytics-thop>=2.0.0,<3.0.1",
+    "py-cpuinfo>=8.0.0,<10.0.0",
+    "matplotlib>=3.3.0,<4.0.0",
+    "pandas>=1.1.4,<3.0.1",
+    "seaborn>=0.11.0,<1.0.0",
+    "scipy>=1.12.0,<2.0.0",
+    # Web service
+    "fastapi>=0.110.0,<1.0.0",
+    "uvicorn[standard]>=0.29.0,<1.0.0",
+    "python-multipart>=0.0.9,<1.0.0",
+    "watchdog>=4.0.0,<7.0.0",
+    "aiofiles>=23.0.1,<26.0.0",
+    "pydantic>=2.6.0,<3.0.1",
+    # OCR (RapidOCR)
+    "rapidocr>=3.5.0,<4.0.0",
+    "onnxruntime>=1.19.0,<2.0.0",
+    "pyclipper>=1.2.0,<2.0.0",
+    "shapely>=1.7.1,<3.0.1",
+    "six>=1.15.0,<2.0.0",
+    "omegaconf>=2.0.0,<3.0.1",
+    "colorlog>=6.0.0,<7.0.0",
+    "coloredlogs>=14.0,<16.0",
+    "flatbuffers>=1.12,<25.0",
+    "protobuf>=3.20.0,<6.0.0",
+    # PDF
+    "PyMuPDF>=1.24.0,<2.0.0",
+    "reportlab>=4.1.0,<5.0.0",
+    # Utilities
+    "pyyaml>=6.0,<7.0",
+    "requests>=2.31.0,<3.0.1",
+    "typing_extensions>=4.10.0,<5.0.0",
+    "tqdm>=4.66.0,<5.0.0",
+    "psutil>=5.9.0,<7.0.0",
+]
+
+[project.optional-dependencies]
+gpu = [
+    "onnxruntime-gpu>=1.19.0",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=6.0",
+    "ruff>=0.9.0",
+]
+
+[project.scripts]
+crabapple-docstudio-server = "backend.server:main"
+crabapple-docstudio-manager = "backend.service_manager:main"
+
+[tool.setuptools.packages.find]
+include = ["backend*"]
+
+[tool.setuptools.package-data]
+backend = ["*.py"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+exclude = [
+    ".git",
+    ".claude",
+    "__pycache__",
+    "node_modules",
+    "assets",
+    "plugins",
+    "frontend",
+    "dist",
+    "build",
+    ".venv",
+    "venv",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "W",   # pycodestyle warnings
+    "I",   # isort
+]
+ignore = [
+    "E501",  # line too long (handled by line-length)
+    "E402",  # module level import not at top (PaddlePaddle env vars)
+    "F401",  # imported but unused (some re-exports)
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["."]
+# xuechong 2026-08-06 审核修复：排除 debug 独立脚本（模块级副作用不兼容 pytest 收集）
+addopts = "-v --tb=short --ignore=tests/debug"
+norecursedirs = ["debug"]

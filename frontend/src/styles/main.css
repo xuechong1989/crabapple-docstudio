@@ -1,0 +1,4570 @@
+/* ============================================================
+   智能文档扫描与AI处理系统 - 现代化UI样式
+   ============================================================ */
+
+/* xuechong 2026-10-09 研发BUG-0071-图档扫描-3.3.01-整体页面优化向商用系统页面看齐
+   全站设计令牌统一：主色收敛为降饱和品牌橙，灰阶/语义色/圆角/控件高度/阴影固定档位，
+   消除此前 main.css(Material系) 与 img-to-pdf.css(Arco系) 两套色板并存的问题；
+   变量名全部保留旧名（引用处零改动），取值按新规范更新 */
+:root {
+  /* 主色：品牌橙降饱和（原来同时存在 #E86100/#FF8C42/#C75300/#ff6b35/#ff7f00 五种橙） */
+  --primary-color: #EA580C;
+  --primary-light: #F97316;
+  --primary-dark: #C2410C;
+  /* 主色浅底：选中行、提示条、图标底 */
+  --primary-light-bg: #FFF7ED;
+
+  /* 语义色：全站各只此一个（原来蓝有 #2196F3/#0066cc/#165dff/#409eff 四种、绿有三种） */
+  --accent-color: #2563EB;
+  --success-color: #16A34A;
+  --warning-color: #D97706;
+  --error-color: #DC2626;
+
+  /* 页面底色：编辑PDF/双层PDF等无独立背景的页面用深色渐变（功能页深色底+白卡片有层次；
+     首页/登录页/图片转PDF各自带独立背景覆盖） */
+  --bg-gradient-start: #2d2d2d;
+  --bg-gradient-end: #3d3d3d;
+  --bg-page: #F5F6F8;
+  --card-bg: #ffffff;
+  --card-bg-glass: #ffffff;
+
+  /* 文字灰阶三档 */
+  --text-primary: #1F2937;
+  --text-secondary: #6B7280;
+  --text-light: #9CA3AF;
+  --text-white: #fff;
+
+  --border-color: #E5E7EB;
+  --border-strong: #D1D5DB;
+
+  /* 阴影两档（废除多层立体阴影与 inset 高光） */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+
+  /* 圆角三档（废除 2/4/8/12/16/20/24px 散落档位） */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --bg-primary: #fff;
+  --bg-secondary: #F5F6F8;
+
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+}
+
+/* 重置和基础样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100vh;
+  overflow: hidden;  /* 禁止页面整体滚动 */
+}
+
+body {
+  font-family: 'Segoe UI', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* xuechong 2026-10-12 研发BUG-0075-图档扫描-3.3.04-全站大背景标准统一化（用户要求）：
+     原为白→极浅灰弱渐变；现升级为与首页 .home-portal 同源的科技感网格背景——
+     极淡蓝网格线+点阵+橙蓝双色光晕+纵向渐变，一处定义全站所有页面自动继承
+     （首页 .home-portal 与登录页 .login-overlay 的副本已删，均透出本背景）；
+     渐变按用户要求加强：底部 #d3deee 加深至 #c3d2e8、光晕透明度同步增强 */
+  background:
+    linear-gradient(rgba(99, 132, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 132, 255, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at 30% 24%, rgba(99, 132, 255, 0.18) 0.8px, transparent 1.7px),
+    radial-gradient(ellipse 900px 460px at 18% -5%, rgba(234, 88, 12, 0.20), transparent 62%),
+    radial-gradient(ellipse 820px 540px at 88% 108%, rgba(99, 132, 255, 0.24), transparent 62%),
+    linear-gradient(180deg, #ffffff 0%, #dfe7f3 42%, #c3d2e8 100%);
+  background-size:
+    44px 44px,
+    44px 44px,
+    260px 210px,
+    auto, auto, auto;
+  background-attachment: fixed;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* 应用容器 */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;  /* 固定高度 */
+  overflow: hidden;  /* 禁止容器滚动 */
+}
+
+/* ============================================================
+   顶部标题栏
+   ============================================================ */
+/* xuechong 2026-10-09 研发BUG-0071 用户三轮复验：顶栏升级金属质感——主色渐变上叠顶部白色高光带，
+   底部深色投影，标题白字带轻投影 */
+.app-header {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(180, 83, 9, 0.20), 0 8px 20px rgba(16, 24, 40, 0.10);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  position: relative;
+  z-index: 100;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  height: 36px;
+  width: auto;  /* 等比缩放，宽度自动计算 */
+  max-width: 120px;  /* 限制最大宽度 */
+  object-fit: contain;  /* 保持图片比例 */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.title-text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-text h1 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-white);
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* 版本徽章：彩色顶栏上的白半透明玻璃徽章（恢复色彩方案） */
+.title-text .version {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-white);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 2px 10px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.5px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-indicator {
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--text-white);
+  font-size: 14px;
+}
+
+.status-indicator.online {
+  background: rgba(22, 163, 74, 0.35);
+}
+
+.status-indicator.active {
+  background: rgba(22, 163, 74, 0.85);
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.offline {
+  background: rgba(220, 38, 38, 0.85);
+  animation: blink 1s infinite;
+}
+
+/* 版本说明按钮 - 基础样式（被后面立体样式覆盖） */
+/* .version-btn 的主样式在后面的"版本按钮和下载列表按钮立体样式"部分定义 */
+
+/* 版本号可点击样式 */
+.title-text .version {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.title-text .version:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 服务状态指示器 - 版本号右侧 */
+.service-status {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  cursor: default;
+  transition: all 0.3s ease;
+}
+
+.service-status .status-dot {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.service-status .status-text {
+  margin-left: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.service-status.online {
+  color: var(--text-white);
+}
+
+.service-status.online .status-dot {
+  color: #6EE7A0;
+}
+
+.service-status.offline {
+  color: #FDE047;
+}
+
+.service-status.offline .status-dot {
+  color: #FDE047;
+  animation: pulse-offline 1.2s ease-in-out infinite;
+}
+
+.service-status.offline .status-text {
+  color: #FDE047;
+  font-weight: 600;
+  animation: blink-text 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse-offline {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+@keyframes blink-text {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============================================================
+   主内容区布局 - 紧凑布局
+   ============================================================ */
+.main-container {
+  flex: 1;
+  display: flex;
+  /* xuechong 2026-10-10 研发BUG-0071 用户复验：区域间隔收紧12→8（与图片转PDF统一网格） */
+  padding: 8px;
+  gap: 8px;
+  overflow: hidden;
+  /* 关键：限制高度为视口高度减去header（顶栏统一56px，研发BUG-0071） */
+  height: calc(100vh - 56px);
+  min-height: 0;  /* 允许flex子项收缩 */
+}
+
+/* ============================================================
+   左侧边栏 - 无圆角
+   ============================================================ */
+/* xuechong 2026-10-09 研发BUG-0071 用户三轮复验：深色背景上的白卡片加半透明描边+分层投影，
+   卡片"浮起"在深色底上（立体感） */
+.sidebar {
+  /* xuechong 2026-10-10 研发BUG-0071 两模块风格统一：左栏宽300→280，与图片转PDF文件栏同宽 */
+  width: 280px;
+  background: var(--card-bg);
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 20px -4px rgba(16, 24, 40, 0.10), 0 20px 44px -12px rgba(16, 24, 40, 0.16);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+  /* 关键：限制最大高度，允许内部滚动 */
+  max-height: 100%;
+  min-height: 0;  /* 允许flex子项收缩 */
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 .sidebar-header（左栏"PDF文件管理"彩色标题头）
+   随编辑PDF左栏与图片转PDF布局统一而移除，样式一并清理 */
+
+/* 上传区域 */
+/* xuechong 2026-10-09 研发BUG-0071 布局统一图片转PDF左栏：去分隔线（itp-file-manager 内部用间距不用线） */
+.upload-section {
+  padding: 16px;
+  /* xuechong 2026-10-10 研发BUG-0071 编辑PDF左栏分区与右侧action-bar同款分隔线（卡内分区模式统一） */
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 .upload-btn（全宽上传按钮）随编辑PDF/双层PDF上传入口
+   统一为 itp-upload-label 而全站无引用，样式清理 */
+
+/* ============================================================
+   上传下拉（全局基础样式）— 研发BUG-0071-图档扫描-3.3.01-整体页面优化向商用系统页面看齐
+   图片转PDF/编辑PDF 的"上传▾"悬停下拉与双层PDF 的全宽"上传"按钮共用；
+   原 styles 在 img-to-pdf.css（组件级引入），编辑PDF/双层PDF直进时样式丢失，迁至全局
+   ============================================================ */
+.itp-upload-dropdown {
+  position: relative;
+}
+
+/* 主按钮：橙色渐变立体（纵向渐变+顶部内高光+底部深边），宽度136px（顶栏与模式下拉并排
+   136+8+136=280px 与左栏严格对齐）；双层PDF 全宽场景由 .dual-layer-upload-section 覆盖 */
+.itp-upload-label {
+  position: relative;
+  width: 136px;
+  height: 40px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #F26B1D 0%, var(--primary-color) 55%, #D94E08 100%);
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  white-space: nowrap;
+  transition: all 0.2s;
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.itp-upload-label:hover:not(.disabled) {
+  background: linear-gradient(180deg, #F97B31 0%, #EA580C 55%, #C2410C 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.itp-upload-label.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.itp-upload-caret {
+  font-size: 12px;
+}
+
+/* 下拉菜单：与按钮无缝贴合（悬停展开模式下缝隙会触发误收起）；
+   宽144px保证最长选项"上传PDF文件"单行（按钮136+图标文字余量） */
+.itp-upload-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 144px;
+  background: #fff;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.itp-upload-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.itp-upload-menu-item:hover {
+  background: var(--primary-light-bg);
+  color: var(--primary-color);
+}
+
+.itp-upload-menu-item.active {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* 双层PDF上传按钮：本模块仅文件夹上传一种入口（无下拉），按钮全宽 */
+.dual-layer-upload-section .itp-upload-label {
+  width: 100%;
+}
+
+.btn-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  display: inline;
+  line-height: 1;
+}
+
+/* 上传进度 */
+.upload-progress {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: var(--radius-sm);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+/* 任务信息卡片 */
+/* xuechong 2026-10-09 研发BUG-0071 布局统一：任务卡改图片转PDF itp-task-info 同款
+   （灰底+主色左边条），替代原橙浅底描边卡 */
+.task-info-card {
+  margin: 0 16px 12px;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--primary-color);
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.folder-icon {
+  font-size: 18px;
+  display: inline-flex;
+}
+
+.folder-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.task-stats {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* 文件树容器 */
+.file-tree-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;  /* 关键：允许flex子项收缩，启用滚动 */
+}
+
+.tree-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: none;
+}
+
+.tree-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.icon-btn:hover {
+  background: #f0f0f0;
+  color: var(--primary-color);
+}
+
+.file-tree {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 12px;
+  min-height: 0;  /* 关键：允许收缩和滚动 */
+}
+
+/* 美化滚动条 */
+.file-tree::-webkit-scrollbar {
+  width: 6px;
+}
+
+.file-tree::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.file-tree::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.file-tree::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* 空状态 */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: var(--text-light);
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 14px;
+}
+
+/* ============================================================
+   右侧主内容区
+   ============================================================ */
+.main-content {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 20px -4px rgba(16, 24, 40, 0.10), 0 20px 44px -12px rgba(16, 24, 40, 0.16);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;  /* 关键：允许flex子项收缩 */
+}
+
+/* 操作栏 - 更紧凑 */
+.action-bar {
+  padding: 10px 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  /* xuechong 2026-10-10 研发BUG-0071 用户复验：与图片转PDF itp-action-bar 同体系；
+     高度73px 使底部分割线(y=138)与左栏 upload-section 分割线上下对齐（用户反馈） */
+  min-height: 73px;
+}
+
+.action-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.selected-path {
+  font-size: 14px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hint-text {
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.action-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-color);
+}
+
+/* ============================================================
+   按钮样式 - 立体、醒目风格
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  height: 36px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 主按钮立体面：顶部亮底部暗的纵向渐变+顶部内高光+底部深边 */
+.btn-primary {
+  background: linear-gradient(180deg, #F26B1D 0%, var(--primary-color) 55%, #D94E08 100%);
+  color: var(--text-white);
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #F97B31 0%, #EA580C 55%, #C2410C 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary:active:not(:disabled) {
+  background: linear-gradient(180deg, #E05509 0%, #C2410C 100%);
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(234, 88, 12, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* 生成记录按钮 - 信息蓝（原青色 #00ACC1 不在语义色板内，研发BUG-0071 统一） */
+.btn-history {
+  background: var(--accent-color);
+  color: var(--text-white);
+  box-shadow: none;
+}
+
+.btn-history:hover:not(:disabled) {
+  background: #1D4ED8;
+  box-shadow: none;
+}
+
+.btn-history:active:not(:disabled) {
+  background: #1E40AF;
+}
+
+.btn-success {
+  background: var(--success-color);
+  color: var(--text-white);
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.25);
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #15803D;
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
+}
+
+.btn-success:active:not(:disabled) {
+  background: #166534;
+}
+
+/* 预览区域 */
+.preview-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  overflow: hidden;
+  position: relative;
+  min-height: 0;  /* 关键：允许flex子项收缩 */
+}
+
+.image-preview-wrapper {
+  max-width: 100%;
+  max-height: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: calc(100vh - 300px);
+  object-fit: contain;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.preview-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  padding: 40px;
+  text-align: center;
+}
+
+.placeholder-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.placeholder-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+}
+
+.placeholder-subtitle {
+  font-size: 14px;
+  color: var(--text-light);
+  margin: 0 0 24px 0;
+}
+
+.drop-zone-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+  background: var(--primary-light-bg);
+  border: 1px dashed rgba(234, 88, 12, 0.35);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.drop-zone-hint .formats {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-color);
+  letter-spacing: 1px;
+}
+
+/* 占位符动画 */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* 进度条 */
+.progress-bar {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar.large {
+  height: 12px;
+  border-radius: 6px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: inherit;
+  transition: width 0.3s ease;
+}
+
+.progress-fill.animated {
+  animation: progressPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* 处理进度 */
+/* xuechong 2026-10-09 研发BUG-0071 两模块进度条风格统一：编辑PDF一键处理进度改白卡浮起
+   （对齐图片转PDF底部 itp-progress-bar-container 进度卡） */
+.process-progress {
+  margin: 12px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 20px -4px rgba(16, 24, 40, 0.10), 0 20px 44px -12px rgba(16, 24, 40, 0.16);
+  flex-shrink: 0;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.progress-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.process-timer {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent-color);
+  background: #EFF6FF;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #BFDBFE;
+}
+
+.progress-percent {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* 完成提示 */
+.complete-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #F0FDF4;
+  border-top: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.complete-icon {
+  font-size: 24px;
+}
+
+.complete-banner span:not(.complete-icon):not(.btn-icon) {
+  flex: 1;
+  font-size: 14px;
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+/* ============================================================
+   Toast 消息
+   ============================================================ */
+.toast-container {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100000;  /* 确保Toast始终在最上层，高于弹窗(10000)和浮窗标题(1000) */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* zhaoqiaotong 2026-09-04 研发需求-0160-图档扫描-3.2.06-新增前端警告信息一键复制功能 */
+/* Toast 改为 flex 布局：文字区占满，右侧容纳"已复制"反馈与关闭按钮 */
+.toast {
+  padding: 12px 16px 12px 24px;
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  box-shadow: var(--shadow-lg);
+  font-size: 14px;
+  animation: toastIn 0.3s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* zhaoqiaotong 2026-09-04 研发需求-0160-图档扫描-3.2.06-新增前端警告信息一键复制功能 */
+/* 文字区：占满剩余宽度，可手动选中复制 */
+.toast-message {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+  user-select: text;
+}
+
+/* zhaoqiaotong 2026-09-04 研发需求-0160-图档扫描-3.2.06-新增前端警告信息一键复制功能 */
+/* 错误提示内部两行结构（消息行+复制提示行）时改为纵向排列 */
+.toast-stacked {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* zhaoqiaotong 2026-09-04 研发需求-0160-图档扫描-3.2.06-新增前端警告信息一键复制功能 */
+/* 错误提示内部第一行：消息文字 + 关闭按钮 横向排列 */
+.toast-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+}
+
+/* zhaoqiaotong 2026-09-04 研发需求-0160-图档扫描-3.2.06-新增前端警告信息一键复制功能 */
+/* 错误提示右侧小关闭按钮：颜色随提示类型（color: inherit） */
+.toast-close {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font-size: 16px;
+  line-height: 22px;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0.65;
+}
+
+.toast-close:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* zhaoqiaotong 2026-09-04 研发需求-0160-图档扫描-3.2.06-新增前端警告信息一键复制功能 */
+/* 复制成功提示行：位于警告条消息下方，绿色以区别于红色警告正文（用户反馈红色同行提示不够醒目） */
+.toast-copied-tip {
+  width: 100%;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.15);
+  color: var(--success-color, #52c41a);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 toast 底色去渐变，统一语义色浅底 */
+.toast.success {
+  background: #F0FDF4;
+  border-left: 4px solid var(--success-color);
+  color: #15803D;
+}
+
+.toast.error {
+  background: #FEF2F2;
+  border-left: 4px solid var(--error-color);
+  color: #B91C1C;
+}
+
+.toast.warning {
+  background: #FFFBEB;
+  border-left: 4px solid var(--warning-color);
+  color: #B45309;
+}
+
+.toast.info {
+  background: #EFF6FF;
+  border-left: 4px solid var(--accent-color);
+  color: #1D4ED8;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   版本说明弹窗
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.25);
+  max-width: 600px;
+  width: 90%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 版本说明弹窗尺寸 */
+.modal-content.version-modal {
+  width: 900px;
+  max-width: 90%;
+  height: 700px;
+  max-height: 90vh;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 用户复验：弹窗标题栏恢复彩色渐变头+白字（主色渐变，降饱和品牌橙），加顶部内高光 */
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：全站弹窗标题栏左上角统一加系统logo
+   （.dlg-logo，logo-white.png 纯白透明底 18px 等比——橙色顶栏/彩头上彩色logo不可见，
+   换白色版）；与标题文字上下居中、左右间隔3px（用户指定）；彩头 h4 是 flex，插入即对齐 */
+.dlg-logo {
+  height: 18px;
+  width: auto;
+  max-width: 54px;
+  object-fit: contain;
+  flex-shrink: 0;
+  vertical-align: middle;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+/* ============================================================
+   弹窗渐变动画（Mac 风格：淡入+中心缩放+上浮；关闭反向渐出；遮罩同步）
+   xuechong 2026-10-10 研发BUG-0071 用户复验：打开与关闭都要渐变、时间稍拉长——
+   由 CSS animation 改为 <Transition name="ds-modal"> 包裹 v-if（关闭动画需 leave 阶段）
+   ============================================================ */
+@keyframes dsDialogIn {
+  from { opacity: 0; transform: scale(0.92) translateY(14px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes dsDialogOut {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to { opacity: 0; transform: scale(0.94) translateY(10px); }
+}
+@keyframes dsOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes dsOverlayOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+/* 遮罩层：进入/离开均淡入淡出 */
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：打开闪烁修复——插入帧没有初始隐藏态，
+   弹窗先全显一帧再被动画拉回 opacity 0 重播（视觉为闪一下）；
+   补 enter-from 静态初始态使插入帧即隐藏，动画接管后平滑渐显 */
+.ds-modal-enter-from { opacity: 0; }
+.ds-modal-enter-from .itp-history-dialog,
+.ds-modal-enter-from .itp-unsaved-dialog,
+.ds-modal-enter-from .itp-delete-dialog,
+.ds-modal-enter-from .itp-restore-dialog,
+.ds-modal-enter-from .itp-batch-pdf-dialog,
+.ds-modal-enter-from .itp-batch-progress-dialog,
+.ds-modal-enter-from .itp-redraw-settings-dialog,
+.ds-modal-enter-from .auto-confirm-dialog,
+.ds-modal-enter-from .utm-modal,
+.ds-modal-enter-from .upload-modal-dialog,
+.ds-modal-enter-from .modal-content,
+.ds-modal-enter-from .error-modal {
+  opacity: 0;
+}
+.ds-modal-enter-active { animation: dsOverlayIn 0.46s ease-out backwards; }
+.ds-modal-leave-active { animation: dsOverlayOut 0.36s ease-in forwards; }
+/* 弹窗卡片：进入缩放上浮（0.42s 稍拉长）/ 离开缩小下沉渐出 */
+.ds-modal-enter-active .itp-history-dialog,
+.ds-modal-enter-active .itp-unsaved-dialog,
+.ds-modal-enter-active .itp-delete-dialog,
+.ds-modal-enter-active .itp-restore-dialog,
+.ds-modal-enter-active .itp-batch-pdf-dialog,
+.ds-modal-enter-active .itp-batch-progress-dialog,
+.ds-modal-enter-active .itp-redraw-settings-dialog,
+.ds-modal-enter-active .auto-confirm-dialog,
+.ds-modal-enter-active .utm-modal,
+.ds-modal-enter-active .upload-modal-dialog,
+.ds-modal-enter-active .modal-content,
+.ds-modal-enter-active .error-modal {
+  animation: dsDialogIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.ds-modal-leave-active .itp-history-dialog,
+.ds-modal-leave-active .itp-unsaved-dialog,
+.ds-modal-leave-active .itp-delete-dialog,
+.ds-modal-leave-active .itp-restore-dialog,
+.ds-modal-leave-active .itp-batch-pdf-dialog,
+.ds-modal-leave-active .itp-batch-progress-dialog,
+.ds-modal-leave-active .itp-redraw-settings-dialog,
+.ds-modal-leave-active .auto-confirm-dialog,
+.ds-modal-leave-active .utm-modal,
+.ds-modal-leave-active .upload-modal-dialog,
+.ds-modal-leave-active .modal-content,
+.ds-modal-leave-active .error-modal {
+  animation: dsDialogOut 0.32s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：全站弹窗标题栏可按住拖拽移动弹窗
+   （utils/dialogDrag.js 全局事件委托实现），标题栏显示移动光标提示 */
+.itp-history-header,
+.modal-header,
+.utm-header,
+.upload-modal-header,
+.error-modal-header,
+.auto-confirm-title,
+.login-header,
+.itp-unsaved-dialog > h4,
+.itp-delete-dialog > h4,
+.itp-restore-dialog > h4,
+.itp-batch-pdf-dialog > h4,
+.itp-batch-progress-dialog > h4,
+.itp-redraw-settings-dialog > h4 {
+  cursor: move;
+}
+
+/* ============================================================
+   标准确认弹框（itp-unsaved 家族）— 全局统一来源
+   xuechong 2026-10-10 研发BUG-0071 用户复验：原完整样式只在 img-to-pdf.css，
+   首页（用户管理）/编辑PDF/双层PDF页未加载该表导致确认框渲染成素白卡
+   （无橙头、白logo隐形、按钮不对齐），上提 main.css 全局生效，四页同一套
+   ============================================================ */
+.itp-unsaved-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.itp-unsaved-dialog {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+.itp-unsaved-dialog h4 {
+  margin: -24px -24px 12px;
+  padding: 6px 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(135deg, var(--primary-color, #EA580C) 0%, var(--primary-light, #F97316) 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 11px 11px 0 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.itp-unsaved-dialog p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+.itp-unsaved-actions,
+.unsaved-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：全站弹窗关闭按钮严格统一（同一套样式）——
+   32px 圆形白玻璃钮、白色×、悬停变亮+顺时针旋转90°；button 前缀提升特异性，
+   稳定覆盖各文件旧定义（scoped 私有样式已删） */
+button.modal-close,
+button.itp-history-close,
+button.utm-close,
+button.upload-modal-close,
+button.itp-progress-close {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.2s ease;
+}
+button.modal-close:hover,
+button.itp-history-close:hover,
+button.utm-close:hover,
+button.upload-modal-close:hover,
+button.itp-progress-close:hover {
+  background: rgba(255, 255, 255, 0.36);
+  transform: rotate(90deg);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-white);
+  margin: 0;
+  /* xuechong 2026-10-10 研发BUG-0071 用户复验：标题内 logo 与文字上下居中、左右间隔3px
+     （flex 居中+gap 3px 为唯一间距来源，logo 自身无 margin） */
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: var(--text-white);
+  font-size: 20px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+/* 版本列表 */
+.version-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.version-item {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.version-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.version-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.version-tag {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  padding: 4px 14px;
+  border-radius: var(--radius-sm);
+}
+
+.version-tag.current {
+  color: #fff;
+  background: var(--primary-color);
+}
+
+.version-date {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.version-badge {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--success-color);
+  background: rgba(22, 163, 74, 0.1);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.version-badge.first {
+  color: var(--accent-color);
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.version-changes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.version-changes li {
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--text-primary);
+  border-bottom: 1px dashed var(--border-color);
+  line-height: 1.6;
+}
+
+.version-changes li:last-child {
+  border-bottom: none;
+}
+
+/* 版本说明底部 */
+.version-footer {
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--primary-light-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(234, 88, 12, 0.15);
+}
+
+.version-footer p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.version-footer strong {
+  color: var(--primary-color);
+}
+
+/* ============================================================
+   滚动条样式
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b0b0b0;
+}
+
+/* ============================================================
+   响应式适配
+   ============================================================ */
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 280px;
+  }
+}
+
+@media (max-width: 900px) {
+  .main-container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    max-height: 40vh;
+  }
+}
+
+/* ============================================================
+   图片修图功能样式
+   ============================================================ */
+
+/* 操作栏中间工具按钮组 */
+.action-center {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 12px;
+}
+
+.tool-btn-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  flex-wrap: nowrap;
+}
+
+/* ============================================================
+   旋转按钮组样式
+   ============================================================ */
+/* xuechong 2026-10-09 研发BUG-0071 两模块按钮风格统一：组容器去灰底，按钮白底描边，
+   悬停主色浅底+主色字（与图片转PDF itp-rotate-btn/itp-history-btn/itp-nav-btn 同规格） */
+.rotate-btn-group {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  margin-right: 4px;
+}
+
+.rotate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 32px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+}
+
+.rotate-btn.rotate-left-btn {
+  border-radius: var(--radius-sm);
+}
+
+.rotate-btn.rotate-right-btn {
+  border-radius: var(--radius-sm);
+}
+
+.rotate-btn:hover:not(:disabled) {
+  background: var(--primary-light-bg);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.rotate-btn:active:not(:disabled) {
+  background: #FFEDE0;
+}
+
+.rotate-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  color: var(--text-light);
+}
+
+.rotate-icon {
+  font-size: 16px;
+  font-weight: bold;
+  color: inherit;
+  line-height: 1;
+}
+
+.tool-btn {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+  height: 32px;
+}
+
+.tool-btn:hover:not(:disabled) {
+  background: var(--primary-light-bg);
+}
+
+.tool-btn:active:not(:disabled) {
+  background: #FFEDE0;
+}
+
+.tool-btn.active {
+  background: var(--primary-color);
+  color: var(--text-white);
+  border-color: var(--primary-color);
+}
+
+.tool-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tool-btn.batch-clean-btn {
+  min-width: 88px;  /* 一键修图: 4字+图标 */
+}
+
+.tool-btn.save-btn {
+  min-width: 88px;  /* 保存修图: 4字+图标 */
+}
+
+.tool-btn.restore-btn {
+  min-width: 88px;  /* 图片还原: 4字+图标 */
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 两模块工具按钮统一：彩色动作按钮与图片转PDF itp-btn-*
+   同规格（无边框纯色、32px高）；保存=绿、还原=主橙 */
+.tool-btn.save-btn:not(:disabled) {
+  background: var(--success-color);
+  color: var(--text-white);
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.3);
+}
+
+.tool-btn.save-btn:not(:disabled):hover {
+  background: #15803D;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.4);
+}
+
+.tool-btn.restore-btn:not(:disabled) {
+  background: var(--primary-color);
+  color: var(--text-white);
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3);
+}
+
+.tool-btn.restore-btn:not(:disabled):hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.4);
+}
+
+/* ============================================================
+   撤销/重做按钮组样式（上一步/下一步）
+   ============================================================ */
+/* xuechong 2026-10-09 研发BUG-0071 两模块按钮风格统一：同旋转/翻页按钮规格 */
+.history-btn-group {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  background: transparent;
+  border-radius: var(--radius-sm);
+}
+
+.history-btn {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 66px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+}
+
+.history-btn.prev-btn {
+  border-radius: var(--radius-sm);
+}
+
+.history-btn.next-btn {
+  border-radius: var(--radius-sm);
+}
+
+.history-btn:hover:not(:disabled) {
+  background: var(--primary-light-bg);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.history-btn:active:not(:disabled) {
+  background: #FFEDE0;
+}
+
+.history-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  color: var(--text-light);
+}
+
+.history-icon {
+  font-size: 14px;
+  font-weight: bold;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.tool-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  display: inline;
+  line-height: 1;
+}
+
+/* 对比模式预览区 - 紧凑布局，无圆角 */
+.preview-area.compare-mode {
+  display: flex;
+  gap: 12px;
+  padding: 0;
+  background: #444;
+}
+
+.preview-panel {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  border: 1px solid #555;
+  background: #000000;
+}
+
+/* 左侧原图面板 - 拖拽光标 */
+.original-panel {
+  cursor: grab;
+}
+
+.original-panel:active {
+  cursor: grabbing;
+}
+
+/* 右侧修改面板 — 橡皮擦光标样式见下方 .itp-editable .edit-canvas */
+
+.preview-panel .image-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  /* 创建层叠上下文，确保内部的transform不影响外部的z-index比较 */
+  transform: translateZ(0);
+}
+
+.preview-panel .preview-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.05s ease-out;
+  user-select: none;
+  transform-origin: center center;
+  pointer-events: none;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* 面板标签 - 左上角显示，区分原图和修改区 */
+.panel-tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 1000;
+  letter-spacing: 1px;
+  box-shadow: 
+    0 2px 0 rgba(0, 0, 0, 0.3),
+    0 3px 8px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  /* 创建层叠上下文，与有transform的图片进行正确的层叠比较 */
+  transform: translateZ(0);
+}
+
+/* ============================================================
+   浮窗标题 - 原图区/修图区 (position: fixed 确保不被遮挡)
+   ============================================================ */
+.floating-panel-title {
+  position: fixed;
+  top: 160px;  /* header高度 + 工具栏高度 + 间距 */
+  color: #ffffff;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  z-index: 10001;  /* 高于弹窗(10000)，确保在弹窗内可见 */
+  letter-spacing: 4px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+}
+
+/* 二级弹窗覆盖层（需要在浮窗标题之上） */
+.modal-overlay.secondary-modal {
+  z-index: 10100;  /* 高于浮窗标题(10001) */
+}
+
+/* 原图区浮窗 - 左侧面板左上角 */
+.floating-title-left {
+  /* sidebar宽度300px + 间距20px */
+  left: 320px;
+  background: #2563EB;
+  border: none;
+}
+
+/* 修图区浮窗 - 右侧面板左上角 */
+.floating-title-right {
+  /* sidebar宽度300px + 左侧面板宽度的一半 + 间距 */
+  left: calc(300px + (100vw - 300px) / 2 + 20px);
+  background: #16A34A;
+  border: none;
+}
+
+/* 响应式 - 中等屏幕 */
+@media (max-width: 1200px) {
+  .floating-title-left {
+    left: 300px;
+  }
+  .floating-title-right {
+    left: calc(280px + (100vw - 280px) / 2 + 15px);
+  }
+}
+
+/* 响应式 - 小屏幕时隐藏浮窗标题 */
+@media (max-width: 900px) {
+  .floating-panel-title {
+    display: none;
+  }
+}
+
+.original-panel .panel-tag {
+  background: #2563EB;
+  border: none;
+}
+
+.edited-panel .panel-tag {
+  background: #16A34A;
+  border: none;
+}
+
+
+/* 编辑画布 - 与图片同步变换 */
+.edit-canvas {
+  position: absolute;
+  pointer-events: none;
+  transform-origin: center center;
+}
+
+/* 确认弹窗 */
+.confirm-modal {
+  max-width: 450px;
+}
+
+.modal-header.warning {
+  background: linear-gradient(135deg, var(--warning-color) 0%, #F59E0B 100%);
+}
+
+.modal-header.warning h2 {
+  color: var(--text-white);
+}
+
+.confirm-message {
+  font-size: 16px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.confirm-warning {
+  font-size: 14px;
+  color: var(--error-color);
+  background: rgba(244, 67, 54, 0.08);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--error-color);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-secondary {
+  background: #f5f5f5;
+  color: var(--text-primary);
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #eee;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.btn-secondary:active:not(:disabled) {
+  background: #e0e0e0;
+}
+
+.btn-danger {
+  background: var(--error-color);
+  color: var(--text-white);
+  box-shadow: 0 2px 6px rgba(244, 67, 54, 0.25);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #C62828;
+  box-shadow: 0 4px 10px rgba(244, 67, 54, 0.35);
+}
+
+.btn-danger:active:not(:disabled) {
+  background: #B71C1C;
+}
+
+/* .tool-btn.batch-clean-btn 的立体样式在后面定义 */
+
+/* 一键修图进度条 */
+/* xuechong 2026-10-09 研发BUG-0071 进度条已白卡化，去掉原蓝浅底 */
+.batch-clean-progress {
+  background: #fff;
+}
+
+.batch-clean-progress .progress-title {
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+.batch-clean-progress .current-path {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.05);
+  padding: 3px 8px;
+  border-radius: 4px;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress-fill.batch-clean {
+  background: var(--accent-color);
+  animation: progressPulse 1.5s ease-in-out infinite;
+}
+
+/* 进度条完成状态 */
+.progress-fill.batch-clean.completed {
+  background: var(--success-color);
+  animation: none;
+}
+
+/* 进度条失败状态 */
+.progress-fill.batch-clean.failed {
+  background: var(--error-color);
+  animation: none;
+}
+
+/* 进度条关闭按钮 */
+.progress-close-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 12px;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.progress-close-btn:hover {
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+/* ============================================================
+   完成横幅关闭按钮
+   ============================================================ */
+.banner-close-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  transition: all var(--transition-fast);
+}
+
+.banner-close-btn:hover {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   下载列表按钮（生成记录）
+   ============================================================ */
+/* .download-list-btn 的主样式在后面的"版本按钮和下载列表按钮立体样式"部分定义 */
+
+/* ============================================================
+   下载列表弹窗
+   ============================================================ */
+.download-list-modal {
+  width: 1000px;
+  max-width: 90%;
+  height: 700px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.download-list-modal .modal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.empty-download-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+
+.empty-download-list .empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-download-list p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.download-list {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.download-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.download-table thead {
+  background: var(--bg-secondary);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.download-table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.download-table td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.download-table tbody tr:hover {
+  background: var(--primary-light-bg);
+}
+
+.index-col {
+  width: 60px;
+  text-align: center;
+}
+
+.index-cell {
+  text-align: center;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.folder-name-cell {
+  max-width: 350px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.time-cell {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.action-cell {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+/* 美化下载列表滚动条 */
+.download-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.download-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.download-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.download-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================================
+   生成记录弹窗（大尺寸版本）
+   ============================================================ */
+.download-list-modal-large {
+  width: 1400px;
+  max-width: 95%;
+  height: 800px;
+  max-height: 95vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.download-list-modal-large .modal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow: hidden;
+}
+
+/* 下载列表容器 */
+.download-list-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.download-list-container .download-list {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* 下载次数列 */
+.download-count-col {
+  width: 90px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.download-count-cell {
+  text-align: center;
+  font-weight: 500;
+}
+
+/* 未下载的行使用黄色背景提醒 */
+.download-table tbody tr.not-downloaded {
+  background-color: #fff3cd !important;
+}
+
+.download-table tbody tr.not-downloaded:hover {
+  background-color: #ffe69c !important;
+}
+
+/* 分页控件样式 */
+.itp-history-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  background: #f8f9fa;
+  flex-shrink: 0;
+}
+
+.itp-history-pagination .history-total {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-bottom-left-radius: var(--radius-sm);
+  border-bottom-right-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+  flex-shrink: 0;
+}
+
+.pagination .history-total {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: normal;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-btn {
+  padding: 8px 14px;
+  font-size: 14px;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+}
+
+.page-btn:hover:not(:disabled) {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 14px;
+  color: var(--text-secondary);
+  min-width: 100px;
+  text-align: center;
+}
+
+.page-size-select {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* 删除确认弹框中的信息样式 */
+.delete-info {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.delete-info p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.delete-info p:first-child {
+  margin-top: 0;
+}
+
+.delete-info p:last-child {
+  margin-bottom: 0;
+}
+
+.delete-info strong {
+  color: var(--text-secondary);
+  margin-right: 8px;
+}
+
+/* ============================================================
+   批量一键生成PDF弹窗样式
+   ============================================================ */
+
+.batch-pdf-modal {
+  width: 1000px;
+  max-width: 95%;
+  height: 700px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.batch-pdf-modal .modal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.batch-pdf-info {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: var(--primary-light-bg);
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--primary-color);
+}
+
+.batch-pdf-info p {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.batch-pdf-info strong {
+  color: var(--primary-color);
+  font-size: 16px;
+}
+
+.batch-pdf-list {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.batch-pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.batch-pdf-table thead {
+  background: var(--bg-secondary);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.batch-pdf-table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.batch-pdf-table td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.batch-pdf-table tbody tr:hover {
+  background: var(--primary-light-bg);
+}
+
+.batch-pdf-table .index-col {
+  width: 80px;
+  text-align: center;
+}
+
+.batch-pdf-table .path-col {
+  width: auto;
+}
+
+.batch-pdf-table .count-col {
+  width: 100px;
+  text-align: center;
+}
+
+.batch-pdf-table .index-cell {
+  text-align: center;
+  font-family: 'Monaco', 'Consolas', monospace;
+  color: var(--text-secondary);
+}
+
+.batch-pdf-table .path-cell {
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.batch-pdf-table .count-cell {
+  text-align: center;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* 批量PDF弹窗底部按钮 */
+.batch-pdf-modal .modal-footer {
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  padding: 16px 24px;
+  background: #f8f9fa;
+  border-top: 1px solid var(--border-color);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* 美化批量PDF列表滚动条 */
+.batch-pdf-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.batch-pdf-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.batch-pdf-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.batch-pdf-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================================
+   批量PDF处理进度条弹窗
+   ============================================================ */
+
+.batch-pdf-progress-modal {
+  width: 550px;
+  max-width: 90%;
+}
+
+.batch-pdf-progress-modal .modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+}
+
+/* 总体进度区域 */
+.batch-overall-progress {
+  background: rgba(232, 97, 0, 0.05);
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(232, 97, 0, 0.1);
+}
+
+.batch-overall-progress .progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.batch-overall-progress .progress-label span:last-child {
+  color: var(--primary-color);
+}
+
+/* 当前文件夹进度区域 */
+.batch-current-progress {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.batch-current-progress .progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.batch-current-progress .progress-label span:first-child {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 16px;
+}
+
+.batch-current-progress .current-progress-percent {
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 14px;
+}
+
+.batch-current-progress .current-status {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--text-light);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.batch-pdf-progress-modal .progress-bar {
+  height: 10px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.batch-pdf-progress-modal .progress-fill {
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.batch-pdf-progress-modal .progress-fill.animated {
+  animation: progressPulse 1.5s ease-in-out infinite;
+}
+
+.batch-pdf-progress-modal .progress-fill.completed {
+  background: var(--success-color);
+  animation: none;
+}
+
+@keyframes progressPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.batch-pdf-progress-modal .progress-hint {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-light);
+  margin-top: 8px;
+}
+
+/* 批量处理完成信息 */
+.batch-complete-info {
+  text-align: center;
+  padding: 16px;
+  background: #F0FDF4;
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  border-radius: var(--radius-sm);
+}
+
+.batch-complete-info .complete-message {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--success-color);
+  margin: 0 0 8px 0;
+}
+
+.batch-complete-info .complete-hint {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ============================================================
+   图片切换按钮组样式（上一张/下一张）
+   ============================================================ */
+/* xuechong 2026-10-09 研发BUG-0071 两模块按钮风格统一 */
+.nav-btn-group {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  margin-right: 12px;
+}
+
+.nav-btn {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 60px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+}
+
+.nav-btn:first-child {
+  border-radius: var(--radius-sm);
+}
+
+.nav-btn:last-child {
+  border-radius: var(--radius-sm);
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--primary-light-bg);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.nav-btn:active:not(:disabled) {
+  background: #FFEDE0;
+}
+
+.nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  color: var(--text-light);
+}
+
+.nav-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.nav-info {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 4px 8px;
+  min-width: 50px;
+  text-align: center;
+  background: #fff;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   未保存修改提示弹窗样式
+   ============================================================ */
+.unsaved-modal {
+  max-width: 480px;
+}
+
+.modal-footer.three-btn {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* ============================================================
+   操作列样式
+   ============================================================ */
+.action-col {
+  width: 100px;
+  text-align: center;
+}
+
+/* ============================================================
+   一键修图按钮样式
+   ============================================================ */
+/* xuechong 2026-10-09 研发BUG-0071 一键修图按钮从紫色统一为主色（紫色不在全站语义色内） */
+.tool-btn.batch-clean-btn:not(:disabled) {
+  background: var(--primary-color);
+  color: var(--text-white);
+  border-color: var(--primary-color);
+}
+
+.tool-btn.batch-clean-btn:not(:disabled):hover {
+  background: var(--primary-dark);
+}
+
+/* ============================================================
+   版本按钮和下载列表按钮立体样式
+   ============================================================ */
+/* xuechong 2026-10-09 研发BUG-0071 用户复验：顶栏恢复彩色后，按钮恢复白半透明玻璃样式
+   （保留 backdrop 毛玻璃与轻投影的立体感，去掉原多层 inset 高光与悬停大位移） */
+.version-btn,
+.download-list-btn,
+.manual-btn,
+.dual-layer-btn {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.12) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-sm);
+  color: var(--text-white);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 90px;
+  height: 32px;
+}
+
+.version-btn:hover,
+.download-list-btn:hover,
+.manual-btn:hover,
+.dual-layer-btn:hover {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.2) 100%);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.version-btn:active,
+.download-list-btn:active,
+.manual-btn:active,
+.dual-layer-btn:active {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ============================================================
+   小型按钮立体样式
+   ============================================================ */
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 14px;
+  height: 28px;
+  min-width: 70px;
+}
+
+.btn-sm.btn-primary {
+  box-shadow: 0 1px 4px rgba(232, 97, 0, 0.2);
+}
+
+.btn-sm.btn-success {
+  box-shadow: 0 1px 4px rgba(76, 175, 80, 0.2);
+}
+
+/* ============================================================
+   图标按钮立体样式
+   ============================================================ */
+.icon-btn {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.icon-btn:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background: var(--primary-light-bg);
+}
+
+.icon-btn:active {
+  background: #FFEDE0;
+}
+
+/* ============================================================
+   完成横幅按钮间距
+   ============================================================ */
+.complete-banner .btn {
+  margin-left: 8px;
+}
+
+/* ============================================================
+   双层PDF转换弹窗样式
+   ============================================================ */
+.dual-layer-modal {
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dual-layer-body {
+  flex: 1;
+  display: flex;
+  /* xuechong 2026-10-10 研发BUG-0071 用户复验：区域间隔收紧12→8（全站统一网格） */
+  gap: 8px;
+  padding: 8px;
+  overflow: hidden;
+  /* xuechong 2026-10-10 研发BUG-0071 背景整体改白：原深色光晕底移除，透出 body 白系渐变 */
+  background: transparent;
+}
+
+/* 左侧栏 - 文件管理区 */
+/* xuechong 2026-10-09 研发BUG-0071 深色背景上的白面板加描边+分层投影（浮起感） */
+.dual-layer-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 20px -4px rgba(16, 24, 40, 0.10), 0 20px 44px -12px rgba(16, 24, 40, 0.16);
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 双层PDF左栏统一图片转PDF布局：
+   彩色标题头（dual-layer-sidebar-header）与 .upload-btn 专用覆盖随模板移除而清理，
+   上传区改用 itp-upload-label（img-to-pdf.css），内边距统一 16px */
+.dual-layer-upload-section {
+  padding: 16px 16px 4px;
+  border-bottom: none;
+}
+
+.dual-layer-sidebar .file-tree-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: none;
+  margin: 0;
+  min-height: 0;
+}
+
+.dual-layer-sidebar .file-tree {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  min-height: 0;
+}
+
+.dual-layer-sidebar .empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+
+.dual-layer-sidebar .empty-state .empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.dual-layer-sidebar .empty-state p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* 中间操作区 */
+/* xuechong 2026-10-09 研发BUG-0071 用户复验：中间列内容不满高时底部裸露深色页面背景
+   （"中间黑一大块"），改为整列一张白卡撑满（面板改卡内分区+分隔线，与左右栏等高） */
+.dual-layer-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 20px -4px rgba(16, 24, 40, 0.10), 0 20px 44px -12px rgba(16, 24, 40, 0.16);
+  overflow: hidden;
+}
+
+.dual-layer-info-panel,
+.dual-layer-settings-panel,
+.dual-layer-progress-panel {
+  background: white;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 用户复验：面板头恢复浅橙渐变+主色标题（保留色彩） */
+.dual-layer-info-panel .panel-header,
+.dual-layer-settings-panel .panel-header,
+.dual-layer-progress-panel .panel-header {
+  padding: 8px 14px;
+  background: linear-gradient(135deg, var(--primary-light-bg) 0%, #fff 100%);
+  border-bottom: 1px solid rgba(234, 88, 12, 0.12);
+}
+
+.dual-layer-info-panel .panel-header h4,
+.dual-layer-settings-panel .panel-header h4,
+.dual-layer-progress-panel .panel-header h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.dual-layer-info-panel .panel-content,
+.dual-layer-settings-panel .panel-content,
+.dual-layer-progress-panel .panel-content {
+  padding: 12px;
+}
+
+.dual-layer-info-panel .panel-content.empty {
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 30px 16px;
+}
+
+.dual-layer-info-panel .panel-content.empty p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  width: 52px;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.info-value {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+.info-value.path-value {
+  font-family: monospace;
+  font-size: 14px;
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* 转换设置 */
+.setting-row {
+  margin-bottom: 14px;
+}
+
+.setting-row:last-child {
+  margin-bottom: 0;
+}
+
+.setting-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.setting-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}
+
+.setting-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(232, 97, 0, 0.1);
+}
+
+.checkbox-row {
+  margin-bottom: 10px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* 操作按钮区 */
+/* xuechong 2026-10-09 研发BUG-0071 随中间列合并为单卡：按钮区改卡内末区（去独立卡样式），
+   flex:1 占满剩余高度避免底部空隙 */
+.dual-layer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background: white;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  flex: 1;
+  align-content: center;
+}
+
+/* 双层PDF转换计时器样式 */
+/* xuechong 2026-10-09 研发BUG-0071 计时器去深蓝渐变面板与荧光绿霓虹发光，改白底描边+常规信息蓝 */
+.dual-layer-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  min-width: 200px;
+}
+
+.timer-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Courier New', Consolas, monospace;
+}
+
+.timer-display .timer-icon {
+  font-size: 18px;
+}
+
+.timer-display .timer-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--accent-color);
+  letter-spacing: 1px;
+}
+
+.timer-display.running .timer-value {
+  animation: timer-pulse 1s ease-in-out infinite;
+}
+
+@keyframes timer-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.timer-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color);
+  width: 100%;
+}
+
+.timer-summary .summary-label {
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.timer-summary .summary-time {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--warning-color);
+}
+
+.timer-summary .summary-stats {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.timer-summary .summary-stats strong {
+  color: var(--accent-color);
+}
+
+.btn-lg {
+  padding: 10px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+}
+
+/* 进度面板 */
+.progress-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.progress-row:last-child {
+  margin-bottom: 0;
+}
+
+.progress-row .progress-label {
+  width: 80px;
+  flex-shrink: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.progress-row .progress-value {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.progress-row .progress-value.step-value {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.progress-row .progress-value .page-info {
+  color: var(--text-secondary);
+  font-weight: normal;
+  margin-left: 8px;
+}
+
+.progress-bar-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-bar-wrapper .progress-bar {
+  flex: 1;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-wrapper .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-bar-wrapper .progress-percent {
+  min-width: 50px;
+  text-align: right;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.progress-stats {
+  display: flex;
+  gap: 20px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.progress-stats .stat-item {
+  font-size: 14px;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.progress-stats .stat-item.success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.progress-stats .stat-item.processing {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.progress-stats .stat-item.pending {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+/* 右侧栏 - 转换记录区 */
+.dual-layer-records {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 20px -4px rgba(16, 24, 40, 0.10), 0 20px 44px -12px rgba(16, 24, 40, 0.16);
+  overflow: hidden;
+}
+
+.dual-layer-records-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 40%),
+    linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  border-radius: calc(var(--radius-md) - 1px) calc(var(--radius-md) - 1px) 0 0;
+}
+
+.dual-layer-records-header h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.dual-layer-records-header .btn-text {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.dual-layer-records-header .btn-text:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dual-layer-records-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.record-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  transition: all 0.2s;
+}
+
+.record-card:last-child {
+  margin-bottom: 0;
+}
+
+.record-card:hover {
+  background: #f0f2f5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.record-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.record-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.record-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.record-time {
+  font-size: 14px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.record-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.record-actions .btn {
+  padding: 4px 10px;
+  min-width: auto;
+  font-size: 14px;
+  border-radius: 6px;
+  transform: none !important;
+  box-shadow: none !important;
+  border: 1px solid transparent;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.record-actions .btn-primary {
+  background: var(--primary-color);
+  color: var(--text-white);
+}
+
+.record-actions .btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  border-color: var(--primary-color);
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.record-actions .btn-success {
+  background: var(--success-color);
+  color: var(--text-white);
+}
+
+.record-actions .btn-success:hover:not(:disabled) {
+  background: #15803D;
+  border-color: #15803D;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.record-actions .btn-edit {
+  background: var(--accent-color);
+  color: var(--text-white);
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+
+.record-actions .btn-edit:hover:not(:disabled) {
+  background: #1D4ED8;
+  border-color: #1D4ED8;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.empty-records {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+
+.empty-records .empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.empty-records p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* 底部状态栏 */
+.dual-layer-footer {
+  padding: 10px 16px;
+  background: #f8f9fa;
+  border-top: 1px solid var(--border-color);
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.dual-layer-footer .result-success {
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+/* 滚动条美化 */
+.dual-layer-sidebar .file-tree::-webkit-scrollbar,
+.dual-layer-records-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dual-layer-sidebar .file-tree::-webkit-scrollbar-track,
+.dual-layer-records-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dual-layer-sidebar .file-tree::-webkit-scrollbar-thumb,
+.dual-layer-records-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+
+.dual-layer-sidebar .file-tree::-webkit-scrollbar-thumb:hover,
+.dual-layer-records-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* ============================================================
+   首页功能入口区样式
+   ============================================================ */
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：科技感网格背景原在此处定义；
+   2026-10-12 研发BUG-0075 全站大背景标准统一化：网格背景上移到 body 一处定义
+   （渐变加强版），本区域自动透出全局背景，此处只保留布局 */
+.home-portal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px 0;
+  overflow: auto;
+}
+
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：门户纵向布局（卡片区撑满居中+版权页脚贴底） */
+.portal-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 1000px;
+  width: 100%;
+}
+
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：首页底部版权页脚（灰色横线+居中版权信息） */
+.home-footer {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 0 48px 16px;
+  text-align: center;
+}
+.home-footer p {
+  margin: 0 auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(90, 105, 130, 0.30);
+  font-size: 12.5px;
+  color: rgba(90, 105, 130, 0.78);
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+.footer-sep {
+  color: rgba(90, 105, 130, 0.45);
+}
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：页脚公司名带官网链接（默认融入版权行灰色，悬停亮主色） */
+.home-footer .footer-company-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.home-footer .footer-company-link:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* xuechong 2026-10-12 研发BUG-0075-图档扫描-3.3.04-登录页添加版权页脚
+   复用 .home-footer 全部样式（内容与横线与首页完全一致），仅补深色遮罩层内的贴底定位 */
+.login-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 用户要求删除门户页标题/副标题/底部提示条文字，
+   对应 .portal-title/.portal-subtitle/.portal-footer/.footer-tip 样式一并清理 */
+
+.portal-cards {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: nowrap;
+  /* xuechong 2026-10-09 研发BUG-0071 用户复验：加立体透视（卡片hover 3D翘起的观察平面） */
+  perspective: 1200px;
+}
+
+.portal-card {
+  /* xuechong 2026-10-10 研发BUG-0071 用户复验：方块本身更立体——底部硬质厚度边（块状侧面）+
+     四边明暗棱线（左上受光/右下背光）+斜面渐变+悬浮投影，不止靠投影 */
+  background:
+    linear-gradient(160deg, #ffffff 0%, #f8fafd 55%, #eef2f8 100%);
+  border-radius: 16px;
+  padding: 36px 28px 28px;
+  width: 260px;
+  min-width: 240px;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.34, 1.3, 0.5, 1), box-shadow 0.4s ease;
+  transform-style: preserve-3d;
+  border: 1px solid rgba(120, 140, 170, 0.20);
+  border-top: 2px solid rgba(255, 255, 255, 0.95);
+  border-left: 1px solid rgba(255, 255, 255, 0.75);
+  border-right-color: rgba(105, 125, 160, 0.22);
+  border-bottom: 1px solid rgba(105, 125, 160, 0.30);
+  box-shadow:
+    0 7px 0 -2px rgba(190, 68, 8, 0.32),
+    0 8px 0 -1px rgba(16, 24, 40, 0.10),
+    0 16px 26px -10px rgba(16, 24, 40, 0.22),
+    0 36px 72px -16px rgba(234, 88, 12, 0.22),
+    0 56px 110px -36px rgba(16, 24, 40, 0.16);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.portal-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  /* xuechong 2026-10-10 研发BUG-0071 顶部彩条常显（科技感强调线），hover 变亮 */
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
+}
+
+/* xuechong 2026-10-10 研发BUG-0071 3D翘起加强：上浮更高+厚度边变厚（块体升起）+投影拉深 */
+.portal-card:hover {
+  transform: translateY(-20px) rotateX(6deg);
+  box-shadow:
+    0 10px 0 -2px rgba(190, 68, 8, 0.40),
+    0 11px 0 -1px rgba(16, 24, 40, 0.12),
+    0 24px 38px -12px rgba(16, 24, 40, 0.26),
+    0 48px 92px -18px rgba(234, 88, 12, 0.30),
+    0 76px 150px -44px rgba(16, 24, 40, 0.20);
+}
+.portal-card:hover::before {
+  opacity: 1;
+}
+
+.portal-card:hover::before {
+  opacity: 1;
+}
+
+.card-icon-wrapper {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* xuechong 2026-10-10 研发BUG-0071 卡片图标球：凸台底座（双环镶边）+发光球体+底部悬浮影 */
+.card-icon-wrapper.scan-icon,
+.card-icon-wrapper.dual-icon,
+.card-icon-wrapper.edit-icon {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 42%),
+    linear-gradient(160deg, var(--primary-light) 0%, var(--primary-color) 60%, #C2410C 100%);
+  border: none;
+  color: #fff;
+  box-shadow:
+    0 0 0 5px #ffffff,
+    0 0 0 6px rgba(105, 125, 160, 0.22),
+    0 5px 10px rgba(180, 54, 8, 0.35),
+    0 14px 30px rgba(234, 88, 12, 0.42),
+    inset 0 2px 2px rgba(255, 255, 255, 0.45),
+    inset 0 -9px 14px -8px rgba(110, 28, 0, 0.5);
+}
+
+.portal-card:hover .card-icon-wrapper {
+  transform: scale(1.1);
+  box-shadow:
+    0 0 0 5px #ffffff,
+    0 0 0 6px rgba(105, 125, 160, 0.22),
+    0 8px 16px rgba(180, 54, 8, 0.4),
+    0 18px 40px rgba(234, 88, 12, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.45),
+    inset 0 -9px 14px -8px rgba(110, 28, 0, 0.5);
+}
+
+.card-icon {
+  font-size: 42px;
+  filter: none;
+}
+
+.card-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：箭头按钮化（胶囊描边态），悬停主色填充白箭头 */
+.action-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 28px;
+  font-size: 18px;
+  color: var(--text-light);
+  border: 1px solid rgba(16, 24, 40, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.portal-card:hover .action-arrow {
+  color: #fff;
+  background: linear-gradient(180deg, var(--primary-light) 0%, var(--primary-color) 100%);
+  border-color: var(--primary-color);
+  box-shadow: 0 3px 8px rgba(234, 88, 12, 0.4);
+  transform: translateX(4px);
+}
+
+/* xuechong 2026-06-01 首页进行中任务指示器 */
+.active-tasks-banner {
+  max-width: 960px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, #fff8e1, #fff3e0);
+  border: 1px solid #ffcc02;
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+.active-tasks-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.active-tasks-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #999;
+  padding: 0 4px;
+  line-height: 1;
+}
+.active-tasks-close:hover {
+  color: #333;
+}
+.active-tasks-icon {
+  font-size: 18px;
+}
+.active-tasks-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e65100;
+}
+.active-tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.active-task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 6px;
+  padding: 10px 14px;
+  border: 1px solid #ffe0b2;
+}
+.active-task-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+.active-task-folder {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+.active-task-meta {
+  font-size: 13px;
+  color: #888;
+}
+.active-task-status {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.active-task-status.status-uploaded {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+.active-task-status.status-processing {
+  background: #e8f5e9;
+  color: #2e7d32;
+  animation: pulse-status 1.5s ease-in-out infinite;
+}
+@keyframes pulse-status {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.active-task-resume {
+  padding: 6px 14px;
+  border: 1px solid #ff7f00;
+  background: #fff;
+  color: #ff7f00;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.active-task-resume:hover {
+  background: #ff7f00;
+  color: #fff;
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 .portal-footer/.footer-tip 已随首页提示条文字删除一并清理 */
+
+/* ============================================================
+   主内容弹框样式（生成双层版PDF）
+   ============================================================ */
+.main-content-modal {
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+}
+
+.main-content-modal .modal-header {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  padding: 6px 20px;
+  flex-shrink: 0;
+}
+
+.main-content-modal .modal-header h2 {
+  font-size: 17px;
+  color: var(--text-white);
+  margin: 0;
+}
+
+.main-content-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* xuechong 2026-10-10 研发BUG-0071 白底统一：自带的#f5f7fa底色移除，透出body白系渐变 */
+  background: transparent;
+}
+
+.main-content-body .main-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* 弹框内的主内容区调整 */
+.main-content-modal .sidebar {
+  height: 100%;
+}
+
+.main-content-modal .main-content {
+  height: 100%;
+}
+
+/* 响应式调整 */
+@media (max-width: 900px) {
+  .portal-cards {
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .portal-card {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+/* 中等屏幕：允许换行 */
+@media (max-width: 1100px) {
+  .portal-cards {
+    flex-wrap: wrap;
+  }
+}
+
+/* 首页卡片动画效果 */
+@keyframes card-glow {
+  0%, 100% {
+    box-shadow: 
+      0 10px 40px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 10px 40px rgba(0, 0, 0, 0.25),
+      0 0 20px rgba(232, 97, 0, 0.15),
+      0 0 0 1px rgba(255, 255, 255, 0.15);
+  }
+}
+
+.portal-card:hover {
+  animation: none;
+}
+
+/* ============================================================
+   登录验证弹框样式
+   ============================================================ */
+/* xuechong 2026-10-12 研发BUG-0075-图档扫描-3.3.04-登录页背景与首页统一：
+   原 2026-10-09 研发BUG-0071 定的深蓝紫渐变背景；用户要求登录页背景与首页一致后
+   先在此处复刻网格背景，随后全站大背景标准统一化上移到 body 一处定义，
+   本遮罩层透明，自动透出全局网格背景 */
+.login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.login-modal {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  width: 420px;
+  max-width: 90vw;
+  overflow: hidden;
+}
+
+.login-header {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  padding: 20px 24px;
+  text-align: center;
+}
+
+.login-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.login-logo {
+  height: 30px;
+  width: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.login-header h2 {
+  color: white;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.login-body {
+  padding: 24px 36px 32px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+}
+
+.login-form > .login-btn {
+  width: 100%;
+  min-width: 160px;
+}
+
+.login-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 标签上置：原 form-group-inline 横排改纵向（类名保留） */
+.login-form .form-group-inline {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.login-form .form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.login-form .form-group-inline label {
+  flex-shrink: 0;
+  width: auto;
+  text-align: left;
+}
+
+.login-form .form-group-inline .login-input {
+  flex: 1;
+  width: 100%;
+}
+
+/* 口令/验证码输入框带图标容器 */
+.input-with-icon {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon .login-input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+/* CAPSLOCK 警告图标 */
+.capslock-warning {
+  position: absolute;
+  right: 12px;
+  font-size: 18px;
+  color: #ff9800;
+  animation: capslock-blink 1s ease-in-out infinite;
+  cursor: help;
+}
+
+@keyframes capslock-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.login-input {
+  padding: 11px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+}
+
+.login-input::placeholder {
+  color: #999;
+}
+
+.captcha-group.form-group-inline .captcha-input {
+  flex: 1;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-weight: 600;
+}
+
+.captcha-image {
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.captcha-image:hover {
+  transform: scale(1.05);
+}
+
+.captcha-image canvas {
+  display: block;
+}
+
+.login-btn {
+  padding: 12px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.35);
+  margin-top: 4px;
+}
+
+.login-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(234, 88, 12, 0.45);
+}
+
+.login-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3);
+}
+
+.login-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* xuechong 2026-06-02 登录/注册切换 */
+.login-toggle {
+  margin-top: 12px;
+  text-align: center;
+}
+.toggle-link {
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.toggle-link:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+/* xuechong 2026-06-02 注册表单标签稍宽以容纳"显示名称" */
+.reg-label {
+  width: 68px !important;
+}
+
+/* ============================================================
+   编辑PDF通用样式
+   ============================================================ */
+
+/* 一键修图进行中遮罩层（通用样式） */
+.edit-pdf-processing-overlay,
+.batch-clean-processing-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 20px;
+  pointer-events: all;
+}
+
+.edit-pdf-processing-overlay .processing-hint,
+.batch-clean-processing-overlay .processing-hint {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* xuechong 2026-10-09 研发BUG-0071 .upload-btn.secondary（虚线白底"选择PDF文件"变体）
+   随编辑PDF上传入口合并为下拉而移除，样式一并清理 */
+
+/* ============================================================
+   全局Loading遮罩样式
+   ============================================================ */
+.global-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(245, 245, 245, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+.global-loading-content {
+  background: white;
+  padding: 30px 50px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.global-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: globalSpin 1s linear infinite;
+}
+
+@keyframes globalSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.global-loading-text {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 编辑PDF一键修图按钮样式 */
+/* xuechong 2026-10-09 研发BUG-0071 两模块风格统一：一键处理=核心动作统一主色（原绿色与图片转PDF"一键修图"橙色不一致） */
+.tool-btn.clean-btn {
+  background: linear-gradient(180deg, #F26B1D 0%, var(--primary-color) 55%, #D94E08 100%);
+  color: white;
+  border-color: var(--primary-color);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.tool-btn.clean-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #F97B31 0%, #EA580C 55%, #C2410C 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.tool-btn.clean-btn:disabled {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ============================================================
+   路由页面共享的顶部导航样式（itp-header）
+   ============================================================ */
+/* xuechong 2026-10-09 研发BUG-0071 用户复验：功能页顶栏恢复彩色（主色渐变替代原纯橙#ff7f00，
+   白字+投影保留立体感）；img-to-pdf.css 中同名定义同步，后加载者生效 */
+.itp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 56px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  color: var(--text-white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+}
+.itp-header .logo {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-white);
+  letter-spacing: 1px;
+}
+.itp-header .header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+/* xuechong 2026-10-09 研发BUG-0071 返回类按钮：彩色顶栏上恢复白半透明玻璃样式（保留轻立体，去过度位移） */
+.itp-back-btn {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.12) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-sm);
+  color: var(--text-white);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 90px;
+  height: 32px;
+}
+.itp-back-btn:hover {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.2) 100%);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+.itp-back-btn:active {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ============================================================
+   操作记录弹窗（itp-history）— 全局共享
+   ============================================================ */
+.itp-history-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.itp-history-dialog {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 600px;
+  width: 90%;
+  height: 70vh;
+  max-height: 85vh;
+  min-height: 420px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+}
+.itp-history-dialog-lg {
+  max-width: 1100px;
+}
+.itp-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: -24px -24px 12px -24px;
+  padding: 6px 24px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  border-radius: 8px 8px 0 0;
+}
+.itp-history-header h4 {
+  font-size: 16px;
+  margin: 0;
+  color: var(--text-white);
+  font-weight: 600;
+  /* xuechong 2026-10-10 研发BUG-0071 用户复验：标题内 logo 与文字上下居中、左右间隔3px
+     （与 img-to-pdf.css 同名规则保持一致，此处在加载顺序上生效） */
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.itp-history-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text-white);
+}
+.itp-history-body {
+  flex: 1;
+  overflow-y: auto;
+}
+.itp-history-empty {
+  text-align: center;
+  color: #999;
+  padding: 40px 0;
+}
+.itp-history-table-wrap {
+  overflow-x: auto;
+}
+.itp-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.itp-history-table th {
+  background: #f5f7fa;
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #e5e9f2;
+  white-space: nowrap;
+}
+.itp-history-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+}
+.itp-history-table tr.not-downloaded td {
+  color: var(--primary-color);
+}
+.itp-history-table .col-index { width: 50px; text-align: center; }
+.itp-history-table .col-count { width: 60px; text-align: center; }
+.itp-history-table .col-dl-count { width: 70px; text-align: center; }
+.itp-history-table .col-action { width: 60px; text-align: center; }
+.itp-history-table .index-cell { text-align: center; color: #999; }
+.itp-history-table .count-cell { text-align: center; }
+.itp-history-table .dl-count-cell { text-align: center; }
+.itp-history-table .action-cell { text-align: center; }
+.itp-history-table .name-cell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.itp-history-table .time-cell {
+  white-space: nowrap;
+  color: #666;
+}
+.itp-history-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  flex-wrap: wrap;
+}
+.itp-history-pagination .page-btn {
+  padding: 4px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+.itp-history-pagination .page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.itp-history-pagination .page-btn:hover:not(:disabled) {
+  background: var(--primary-color);
+  color: #fff;
+  border-color: var(--primary-color);
+}
+.itp-history-pagination .page-info {
+  font-size: 14px;
+  color: #333;
+}
+.itp-history-pagination .page-size-select {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.itp-history-pagination .history-total {
+  font-size: 14px;
+  color: #999;
+}
+
+/* itp-btn 系列 — 操作记录弹窗按钮 */
+.itp-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.itp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.itp-btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+.itp-btn-success {
+  background-color: var(--success-color);
+  color: #fff;
+}
+.itp-btn-sm {
+  padding: 4px 10px;
+  font-size: 14px;
+}
+.itp-btn-danger {
+  background-color: var(--error-color);
+  color: #fff;
+  border: 1px solid var(--error-color);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.itp-btn-danger:hover {
+  background-color: #B91C1C;
+}
+
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：四张 itp-history-table（转换/上传记录、用户管理、
+   编辑PDF操作记录）行内操作按钮全站统一为白底描边小按钮，删除单独红描边（不再彩色实心）；
+   定义于 main.css 单一来源，img-to-pdf.css 重复块已同值对齐，跨页面严格同款 */
+.itp-history-table .itp-btn-sm {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  background: #ffffff;
+  color: #374151;
+  border: 1px solid #D0D5DD;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.itp-history-table .itp-btn-sm:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: #FFF7ED;
+}
+.itp-history-table .itp-btn-sm.itp-btn-danger {
+  color: #DC2626;
+  border-color: #F0B9B9;
+  background: #ffffff;
+}
+.itp-history-table .itp-btn-sm.itp-btn-danger:hover {
+  background: #DC2626;
+  border-color: #DC2626;
+  color: #ffffff;
+}
+
+/* ============================================================
+   预览区域（itp-preview）— 全局共享
+   ============================================================ */
+.itp-preview-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex: 1;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 16px;
+  padding-bottom: 24px;
+  overflow: hidden;
+  min-height: 0;
+}
+.itp-path-bar {
+  flex-basis: 100%;
+  background-color: #f5f5f5;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}
+.itp-path-text {
+  font-size: 14px;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+.itp-preview-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  min-width: 0;
+}
+.itp-preview-panel-right {
+  border-left: 1px solid #8c95a8;
+}
+.itp-preview-title {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 2;
+  flex-shrink: 0;
+}
+.itp-title-tag {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #666;
+}
+.itp-tag-gray {
+  background-color: #f2f3f5;
+}
+.itp-tag-blue {
+  background-color: var(--accent-color);
+}
+.itp-tag-green {
+  background-color: var(--success-color);
+}
+.itp-preview-content {
+  flex: 1;
+  border: 1px solid #b0b8c8;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  min-height: 300px;
+}
+.itp-preview-content .image-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.itp-preview-content .preview-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.itp-preview-content .edit-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.itp-editable .edit-canvas {
+  pointer-events: auto;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Crect x='2' y='2' width='16' height='16' fill='white' stroke='%23333' stroke-width='2'/%3E%3C/svg%3E") 10 10, crosshair;
+}
+.itp-scan-placeholder {
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+.itp-scan-placeholder .placeholder-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  color: #ccc;
+}

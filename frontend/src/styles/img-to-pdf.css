@@ -1,0 +1,2003 @@
+/* ========================================
+   图片转PDF页面全局样式 (itp- 前缀)
+   ======================================== */
+
+/* 页面容器 */
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：深色光晕底改白（与首页/全局统一），白面板浮起 */
+.itp-page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background:
+    radial-gradient(ellipse 900px 500px at 12% 0%, rgba(234, 88, 12, 0.06), transparent 60%),
+    radial-gradient(ellipse 800px 500px at 88% 100%, rgba(37, 99, 235, 0.05), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%);
+  overflow: hidden;
+}
+
+/* 顶部导航 */
+/* xuechong 2026-10-09 研发BUG-0071-图档扫描-3.3.01-整体页面优化向商用系统页面看齐
+   用户复验：功能页顶栏恢复彩色——主色渐变（替代原高饱和纯橙#ff7f00）+白字+投影 */
+.itp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 56px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  color: var(--text-white);
+  box-shadow: 0 2px 6px rgba(180, 83, 9, 0.20), 0 8px 20px rgba(16, 24, 40, 0.10);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+}
+/* xuechong 2026-10-10 研发BUG-0071 顶栏左上角改为系统logo图标+模块名+版本徽章
+   （复用 main.css 全局 .logo-container/.logo-icon/.title-text/.version），原 .logo 文字样式清理 */
+.itp-header .header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+/* xuechong 2026-10-10 研发BUG-0071 模式+上传下拉回左栏后，顶栏32px覆盖样式清理 */
+/* xuechong 2026-10-09 研发BUG-0071 返回类按钮：彩色顶栏上恢复白半透明玻璃样式（轻立体，去过度位移/多层高光） */
+.itp-back-btn {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.12) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
+  color: var(--text-white);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 90px;
+  height: 32px;
+}
+.itp-back-btn:hover {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.2) 100%);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+.itp-back-btn:active {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* 流程进度条 */
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：模式/上传下拉是操作按钮，与右侧3大步骤（流程指示）
+   性质不同不圈同一张卡——白卡边界只包步骤条（.itp-steps-wrapper），左区俩下拉独立无卡，
+   仍保持与左栏280px对齐；步骤卡与右侧修图区域等宽 */
+.itp-process-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  /* xuechong 2026-10-10 研发BUG-0071 用户复验：步骤条卡挪入右列顶部（宽度与主区等宽），
+     原独立行外边距取消（由右列 gap 8 管理） */
+  margin: 0;
+  position: relative;
+  flex-shrink: 0;
+  background: transparent;
+}
+/* 左侧操作区：与 itp-file-manager 同宽（280px），下拉并排水平对齐
+   xuechong 2026-10-10 研发BUG-0071 模式+上传迁入左栏后本类无引用，样式清理 */
+/* 步骤条独立白卡：3大步骤区域有边界（用户反馈），与下方左栏/主区卡同体系 */
+.itp-steps-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  background: #fff;
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 20px -4px rgba(16, 24, 40, 0.10), 0 20px 44px -12px rgba(16, 24, 40, 0.16);
+  padding: 10px 24px;
+}
+.itp-steps-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  width: 90%;
+  height: 2px;
+  background-color: #e3e7ef;
+  transform: translateY(-50%);
+  z-index: 1;
+  margin-top: -4px;
+}
+.itp-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+  width: 20%;
+  cursor: default;
+}
+.itp-step.clickable {
+  cursor: pointer;
+}
+.itp-step.clickable:hover .itp-step-icon {
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.45);
+}
+.itp-step-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  /* xuechong 2026-10-10 研发BUG-0071 白底下回调：浅灰底+描边+灰字（原白底白字深色底适配不可见） */
+  background-color: #eef1f6;
+  border: 1px solid #e0e5ee;
+  color: #8a93a5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+.itp-step-text {
+  font-size: 14px;
+  color: #8a93a5;
+  transition: color 0.3s;
+}
+/* xuechong 2026-10-09 研发BUG-0071 步骤条配色统一主色系：进行中主色填充、完成主色浅底+主色字（原蓝#165dff/绿#00b42a与橙主题脱节） */
+.itp-step.active .itp-step-icon {
+  background-color: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.25);
+}
+.itp-step.active .itp-step-text {
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+.itp-step.completed .itp-step-text {
+  color: #3f4653;
+  font-weight: 500;
+}
+.itp-step-indicator {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid var(--primary-color);
+  margin-top: 2px;
+}
+.itp-step.completed .itp-step-icon {
+  background-color: var(--primary-light-bg);
+  color: var(--primary-color);
+  border: 1px solid rgba(234, 88, 12, 0.35);
+}
+.itp-step-tip {
+  display: none;
+  position: absolute;
+  /* xuechong 2026-10-10 研发BUG-0071 用户复验：步骤条卡移至右列顶部后上方仅8px空间，
+     tip 由上方改为下方显示（原 top:-36px 被顶栏/列边界裁剪遮住），并置顶层级盖住主区 */
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  z-index: 60;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.itp-step:hover .itp-step-tip {
+  display: block;
+}
+
+/* 主体布局 */
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：左栏整列顶到顶栏下（y=64），右列=步骤条卡+主区 */
+.itp-main-layout {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  padding: 8px;
+  margin-top: 0;
+  overflow: hidden;
+  min-height: 0;
+  position: relative;
+}
+
+/* 右列：步骤条卡（顶部）+ 步骤视图主区，与左栏同高 */
+.itp-right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* 自动模式：精确禁止交互，仅放行顶栏按钮、模式下拉框、上传按钮 */
+.itp-page.auto-mode .itp-step.clickable { pointer-events: none; }
+.itp-page.auto-mode .itp-tree-actions { pointer-events: none; }
+.itp-page.auto-mode .itp-tree-node { pointer-events: none; }
+.itp-page.auto-mode .itp-main-content { pointer-events: none; }
+.itp-page.auto-mode .itp-progress-bar-container { pointer-events: none; }
+.itp-page.auto-mode .itp-complete-banner { pointer-events: none; }
+.itp-page.auto-mode .itp-upload-label { pointer-events: auto; }
+
+/* 左侧文件管理栏 */
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：模式+上传下拉在栏内顶部分区（与文件树
+   连成一张卡、灰色分割线分开）；栏内容宽248px，两下拉 flex 均分（各120px）拼满一行 */
+.itp-sidebar-actions {
+  display: flex;
+  gap: 8px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+.itp-sidebar-actions .itp-mode-dropdown,
+.itp-sidebar-actions .itp-upload-dropdown {
+  flex: 1;
+  width: 120px;
+}
+.itp-sidebar-actions .itp-mode-select,
+.itp-sidebar-actions .itp-upload-label {
+  width: 100%;
+  height: 40px;
+}
+.itp-sidebar-actions .itp-mode-menu,
+.itp-sidebar-actions .itp-upload-menu {
+  width: 100%;
+}
+/* xuechong 2026-10-11 研发BUG-0074-图档扫描-3.3.03-图片转PDF模块添加页码选项
+   生成页码统一开关（用户复验调整：从左栏移入工具栏按钮组，位于一键修图与还原之间）：
+   白底描边与工具栏按钮同风格同高（32px），勾选状态控制所有生成链路是否加页码；
+   嵌入模式不渲染（form-in 行为固定）；处理锁定期间随工具栏一并禁用 */
+.itp-action-bar .itp-page-num-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  background: #fff;
+  border: 1px solid var(--border-color, #E5E7EB);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--text-primary, #1F2937);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.itp-action-bar .itp-page-num-check input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: var(--primary-color, #EA580C);
+  cursor: pointer;
+}
+.itp-action-bar .itp-page-num-check:hover {
+  border-color: var(--primary-color, #EA580C);
+  color: var(--primary-color, #EA580C);
+}
+.itp-action-bar .itp-page-num-check:has(input:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.itp-action-bar .itp-page-num-check:has(input:disabled) input[type="checkbox"] {
+  cursor: not-allowed;
+}
+.itp-file-manager {
+  width: 280px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  flex-shrink: 0;
+  overflow: hidden;
+  min-height: 0;
+}
+/* xuechong 2026-10-09 研发BUG-0071 上传下拉全套基础样式（label/menu/menu-item 等）
+   迁至全局 main.css 统一管理：编辑PDF/双层PDF页不加载本文件（组件级引入），直进这些页面时
+   样式会丢失（编辑PDF实测按钮塌成58px、菜单裸奔）；本文件仅保留本页特有的顶栏场景修饰 */
+.itp-page.auto-mode .itp-upload-label { pointer-events: auto; }
+.itp-upload-dropdown {
+  position: relative;
+}
+/* xuechong 2026-10-10 研发BUG-0071 模式+上传迁入左栏（itp-sidebar-actions），
+   原顶部行定位类 itp-topbar-upload 无引用，样式清理 */
+.itp-upload-progress {
+  margin-bottom: 12px;
+}
+.itp-upload-progress .progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 4px;
+}
+.itp-upload-progress .progress-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.itp-spinner-sm {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #D1D5DB;
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: itp-spin 0.8s linear infinite;
+}
+/* xuechong 2026-06-01 取消上传按钮样式 */
+.itp-btn-cancel-upload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--error-color);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--error-color);
+  font-size: 12px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: all 0.2s;
+}
+.itp-btn-cancel-upload:hover {
+  background: var(--error-color);
+  color: #fff;
+}
+@keyframes itp-spin {
+  to { transform: rotate(360deg); }
+}
+.itp-task-info {
+  background-color: var(--bg-secondary);
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  border-left: 3px solid var(--primary-color);
+}
+.itp-task-info .folder-name {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.itp-task-info .folder-desc {
+  font-size: 14px;
+  color: #666;
+}
+.itp-file-tree-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.itp-file-tree-header span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+}
+.itp-tree-actions {
+  display: flex;
+  gap: 4px;
+}
+.itp-tree-actions button {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  background-color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+.itp-tree-actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.itp-file-tree {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+.itp-file-tree::-webkit-scrollbar {
+  width: 6px;
+}
+.itp-file-tree::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+.itp-file-tree::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+.itp-file-tree::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+.itp-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: #999;
+}
+.itp-empty-state .empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+/* 右侧主内容区 */
+/* xuechong 2026-10-10 研发BUG-0071 用户复验：按钮组与预览区两卡间隔太远的反馈——
+   右侧整体合为一张白卡（与双层PDF中间列同方案），子区降级为卡内分区
+   （操作栏底部以分隔线与预览区隔开），gap 归零 */
+.itp-right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 20px -4px rgba(16, 24, 40, 0.10), 0 20px 44px -12px rgba(16, 24, 40, 0.16);
+}
+
+/* 右侧卡内分区：子卡描边/圆角/投影全部卸掉（由外层大卡统一承载），
+   操作栏作为顶部分区以底部分隔线与下方内容分开 */
+.itp-right-panel > .itp-action-bar,
+.itp-right-panel > .itp-preview-area,
+.itp-right-panel > .itp-generate-page,
+.itp-right-panel > .itp-ocr-page,
+.itp-right-panel > .itp-review-module {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.itp-right-panel > .itp-action-bar {
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 操作栏 */
+.itp-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* xuechong 2026-10-09 研发BUG-0071 用户复验：固定最小高度，无图片空态与上传后
+     有按钮时工具栏高度一致（原空态只剩padding塌成矮条） */
+  min-height: 58px;
+}
+.itp-action-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.itp-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+/* xuechong 2026-10-11 研发BUG-0073-图档扫描-3.3.02-图片转PDF模块漏光净化质量优化
+   工具栏白底描边按钮三套（nav/rotate/history）样式统一：32px高、0 10px内边距、
+   gap 4px、字号13px，悬停橙字橙边浅橙底、禁用40%透明（原三套高度/内边距/重复声明不一） */
+.itp-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid var(--border-strong, #D1D5DB);
+  background-color: #fff;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.itp-nav-btn:hover:not(:disabled) {
+  background: var(--primary-light-bg, #FFF7ED);
+  border-color: var(--primary-color, #EA580C);
+  color: var(--primary-color, #EA580C);
+}
+.itp-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.itp-nav-info {
+  font-size: 14px;
+  color: #999;
+  min-width: 40px;
+  text-align: center;
+}
+.itp-tool-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.itp-dropdown {
+  position: relative;
+}
+.itp-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  min-width: 140px;
+  z-index: 100;
+  padding: 4px 0;
+}
+.itp-dropdown-item {
+  padding: 8px 14px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.itp-dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+.itp-dropdown-divider {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 4px 8px;
+}
+.itp-tool-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.itp-tool-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/* xuechong 2026-10-09 研发BUG-0071 itp-btn 色系并入全站语义色（原 #165dff/#ff7f00/#00b42a 与 main.css 色板并存） */
+.itp-btn-purple {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+.itp-btn-gray {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+.itp-btn-orange {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+.itp-btn-blue {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+.itp-btn-green {
+  background-color: var(--success-color);
+  color: #fff;
+}
+.itp-rotate-group {
+  display: flex;
+  gap: 2px;
+}
+.itp-rotate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid var(--border-strong, #D1D5DB);
+  background-color: #fff;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.itp-rotate-btn:hover:not(:disabled) {
+  background: var(--primary-light-bg, #FFF7ED);
+  border-color: var(--primary-color, #EA580C);
+  color: var(--primary-color, #EA580C);
+}
+.itp-rotate-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.itp-history-group {
+  display: flex;
+  gap: 2px;
+}
+.itp-history-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid var(--border-strong, #D1D5DB);
+  background-color: #fff;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.itp-history-btn:hover:not(:disabled) {
+  background: var(--primary-light-bg, #FFF7ED);
+  border-color: var(--primary-color, #EA580C);
+  color: var(--primary-color, #EA580C);
+}
+.itp-history-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.itp-action-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.itp-stop-btn {
+  background: #fff;
+  color: var(--error-color);
+  border-color: var(--error-color);
+  animation: stop-pulse 1.5s ease-in-out infinite;
+}
+.itp-stop-btn:hover {
+  background: var(--error-color);
+  color: #fff;
+}
+@keyframes stop-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+}
+
+/* 预览区 */
+.itp-preview-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex: 1;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 16px;
+  padding-bottom: 24px;
+  overflow: hidden;
+  min-height: 0;
+}
+.itp-path-bar {
+  flex-basis: 100%;
+  background-color: #f5f5f5;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}
+.itp-path-text {
+  font-size: 14px;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+.itp-preview-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  min-width: 0;
+}
+.itp-preview-panel-right {
+  border-left: 1px solid var(--border-strong);
+}
+.itp-preview-title {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 2;
+  flex-shrink: 0;
+}
+.itp-title-tag {
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #666;
+}
+.itp-tag-gray {
+  background-color: #F3F4F6;
+  color: var(--text-secondary);
+}
+.itp-tag-blue {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+.itp-tag-green {
+  background-color: var(--success-color);
+  color: #fff;
+}
+.itp-preview-content {
+  flex: 1;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  min-height: 300px;
+  background-color: var(--bg-secondary);
+}
+.itp-preview-content .image-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.itp-preview-content .preview-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.itp-preview-content .edit-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.itp-editable .edit-canvas {
+  pointer-events: auto;
+}
+.itp-scan-placeholder {
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+.itp-scan-placeholder .placeholder-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  color: #ccc;
+}
+.itp-loading-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent-color);
+  font-size: 14px;
+}
+.itp-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #E5E7EB;
+  border-top: 2px solid var(--accent-color);
+  border-radius: 50%;
+  animation: itp-spin 1s linear infinite;
+}
+/* @keyframes itp-spin 已在文件前部定义，此处复用 */
+
+/* 批量修图进度覆盖层 */
+.itp-batch-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 8px;
+}
+
+/* 一键修图转圈动画（无遮罩） */
+.itp-batch-spinner-wrap {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  pointer-events: none;
+}
+.itp-batch-spinner {
+  position: relative;
+  width: 56px;
+  height: 56px;
+}
+.itp-batch-spinner-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid transparent;
+}
+.itp-batch-spinner-ring:nth-child(1) {
+  border-top-color: var(--accent-color);
+  animation: batch-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+.itp-batch-spinner-ring:nth-child(2) {
+  border-right-color: var(--accent-color);
+  opacity: 0.6;
+  animation: batch-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  animation-delay: -0.15s;
+}
+.itp-batch-spinner-ring:nth-child(3) {
+  border-bottom-color: var(--accent-color);
+  opacity: 0.3;
+  animation: batch-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  animation-delay: -0.3s;
+}
+@keyframes batch-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.itp-batch-hint {
+  font-size: 15px;
+  color: var(--accent-color);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* 底部进度条 */
+.itp-progress-bar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background-color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  flex-shrink: 0;
+  margin: 0 12px 12px;
+}
+.itp-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+.itp-progress-title {
+  color: #333;
+  font-weight: 500;
+}
+.itp-progress-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: #666;
+}
+.itp-progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: var(--border-color);
+  border-radius: 3px;
+  overflow: hidden;
+}
+/* xuechong 2026-10-09 研发BUG-0071 底部进度条填充色并入语义色（进行中蓝/完成绿/失败红/批量修图蓝） */
+.itp-progress-fill {
+  height: 100%;
+  background-color: var(--success-color);
+  transition: width 0.3s ease;
+}
+.itp-progress-fill.animated {
+  background: linear-gradient(90deg, #EA580C, #F97316);
+}
+.itp-progress-fill.batch-clean {
+  background: linear-gradient(90deg, #EA580C, #F97316);
+}
+.itp-progress-fill.completed {
+  background-color: var(--success-color);
+}
+.itp-progress-fill.failed {
+  background-color: var(--error-color);
+}
+.itp-progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #999;
+}
+.itp-progress-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #999;
+  padding: 2px 6px;
+}
+.itp-progress-close:hover {
+  color: #333;
+}
+
+
+/* 完成横幅 */
+.itp-complete-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #f0f5ff;
+  border: 1px solid #c9d6ff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  margin: 0 12px;
+}
+.itp-complete-banner .complete-icon {
+  font-size: 20px;
+}
+.itp-complete-banner .complete-text {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+}
+.itp-banner-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #999;
+  padding: 2px 6px;
+}
+
+/* 复核模块 */
+.itp-review-module {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+.itp-module-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+.itp-review-item {
+  margin-bottom: 16px;
+}
+.itp-review-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 6px;
+  display: block;
+}
+.itp-review-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  min-height: 60px;
+  resize: vertical;
+  font-family: inherit;
+}
+.itp-review-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+.itp-metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.itp-metadata-item {
+  display: flex;
+  flex-direction: column;
+}
+.itp-metadata-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 6px;
+}
+.itp-metadata-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+}
+.itp-metadata-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+.itp-review-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* 步骤3 OCR转换 */
+.itp-ocr-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 24px;
+}
+.itp-ocr-header {
+  margin-bottom: 24px;
+}
+.itp-ocr-header h3 {
+  font-size: 18px;
+  color: #333;
+  margin: 0 0 8px;
+}
+.itp-ocr-header p {
+  font-size: 14px;
+  color: #999;
+  margin: 0;
+}
+.itp-ocr-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.itp-ocr-btn {
+  padding: 14px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.itp-ocr-btn.itp-btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-color: var(--primary-color);
+}
+.itp-ocr-btn.itp-btn-primary:hover {
+  background-color: #C2410C;
+}
+.itp-ocr-info {
+  background: #f5f7fa;
+  border-radius: 8px;
+  padding: 16px;
+}
+.itp-ocr-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.itp-ocr-info-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+.itp-ocr-info-value {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 步骤5 生成PDF */
+.itp-generate-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 24px;
+  overflow-y: auto;
+}
+.itp-generate-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.itp-generate-header h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 8px;
+}
+.itp-generate-header p {
+  font-size: 14px;
+  color: #666;
+}
+.itp-generate-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+.itp-generate-btn {
+  padding: 12px 32px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.itp-generate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.itp-generate-progress {
+  margin-top: 24px;
+}
+.itp-generate-complete {
+  text-align: center;
+  margin-top: 24px;
+}
+.itp-generate-complete .success-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+.itp-generate-complete p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* 未保存修改对话框 */
+.itp-unsaved-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.itp-unsaved-dialog {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.itp-unsaved-dialog h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.itp-unsaved-dialog p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+.itp-unsaved-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 删除确认对话框 */
+.itp-delete-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.itp-delete-dialog {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.itp-delete-dialog h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.itp-delete-dialog p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+.itp-delete-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 重绘设置弹窗 */
+.itp-redraw-settings-dialog {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.itp-redraw-settings-dialog h4 {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+.itp-setting-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.itp-setting-row label {
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+}
+.itp-setting-row input[type="range"] {
+  flex: 1;
+  accent-color: var(--primary-color);
+}
+.itp-step-value {
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 28px;
+  text-align: right;
+  color: var(--primary-color);
+}
+
+/* 还原确认对话框 */
+.itp-restore-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.itp-restore-dialog {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.itp-restore-dialog h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.itp-restore-dialog p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+.itp-restore-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 批量PDF确认对话框 */
+.itp-batch-pdf-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.itp-batch-pdf-dialog {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.itp-batch-pdf-dialog h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.itp-batch-pdf-list {
+  margin-bottom: 16px;
+}
+.itp-batch-pdf-item {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+.itp-batch-pdf-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 批量PDF进度对话框 */
+.itp-batch-progress-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.itp-batch-progress-dialog {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.itp-batch-progress-dialog h4 {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+.itp-batch-progress-item {
+  margin-bottom: 12px;
+}
+.itp-batch-progress-item .item-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.itp-batch-progress-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+/* 加载遮罩 */
+/* 通用按钮 */
+.itp-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.itp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.itp-btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+.itp-btn-success {
+  background-color: var(--success-color);
+  color: #fff;
+}
+.itp-btn-default {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+.itp-btn-warning {
+  background-color: var(--warning-color);
+  color: #fff;
+}
+.itp-btn-orange {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+.itp-btn-orange-light {
+  background-color: var(--primary-light-bg);
+  color: var(--primary-color);
+  border: 1px solid rgba(234, 88, 12, 0.3);
+}
+
+/* 进度条通用 */
+.itp-progress-general {
+  width: 100%;
+  height: 6px;
+  background-color: var(--border-color);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.itp-progress-general .fill {
+  height: 100%;
+  background-color: var(--success-color);
+  transition: width 0.3s ease;
+}
+
+/* 响应式 */
+@media (max-width: 1400px) {
+  .itp-preview-area {
+    flex-direction: column;
+  }
+  .itp-metadata-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 1024px) {
+  .itp-main-layout {
+    flex-direction: column;
+    height: auto;
+  }
+  .itp-file-manager {
+    width: 100%;
+    max-height: 300px;
+  }
+  .itp-metadata-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .itp-action-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .itp-action-center {
+    width: 100%;
+  }
+}
+
+/* ========================================
+   模式切换 + 紧凑步骤条 + 操作记录弹窗
+   ======================================== */
+
+/* 模式切换下拉框 */
+/* xuechong 2026-10-09 研发BUG-0071 模式选择改自定义悬停展开下拉（与上传下拉同一交互与样式、
+   同宽高并排水平对齐；原生select已移除） */
+.itp-mode-dropdown {
+  position: relative;
+  flex-shrink: 0;
+  width: 136px;
+}
+.itp-mode-select {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(180deg, #F26B1D 0%, var(--primary-color) 55%, #D94E08 100%);
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all 0.2s;
+}
+.itp-mode-select:hover {
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+/* xuechong 2026-10-11 研发BUG-0073-图档扫描-3.3.02-图片转PDF模块漏光净化质量优化
+   处理期间模式下拉禁用态（与上传按钮 .itp-upload-label.disabled 同口径） */
+.itp-mode-select.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.itp-mode-caret {
+  flex-shrink: 0;
+}
+.itp-mode-menu {
+  /* xuechong 2026-10-09 研发BUG-0071 菜单与按钮同宽（容器136px），两个下拉合计280px与左栏严格对齐 */
+  width: 100%;
+}
+.itp-upload-menu-item.active {
+  color: var(--primary-color, #EA580C);
+  font-weight: 600;
+}
+
+/* xuechong 2026-10-11 研发BUG-0073-图档扫描-3.3.02-图片转PDF模块漏光净化质量优化
+   处理中当前步骤圆圈外围旋转光环（用户复验要求，类似loading）：圆环悬于圆圈外缘
+   5px处，主色弧段+浅色余弧旋转，处理结束随 processing 类移除自然消失 */
+.itp-step.processing .itp-step-icon {
+  position: relative;
+}
+.itp-step.processing .itp-step-icon::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  border: 2px solid rgba(234, 88, 12, 0.18);
+  border-top-color: #F26B1D;
+  border-right-color: rgba(242, 107, 29, 0.55);
+  animation: itp-step-spin 0.9s linear infinite;
+}
+@keyframes itp-step-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .itp-step.processing .itp-step-icon::after {
+    animation-duration: 2.4s;
+  }
+}
+
+/* 紧凑步骤项 */
+.itp-step.compact {
+  width: 18%;
+}
+.itp-step.compact .itp-step-icon {
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+}
+.itp-step.compact .itp-step-text {
+  font-size: 14px;
+}
+
+/* 操作记录弹窗 */
+.itp-history-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.itp-history-dialog {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 600px;
+  width: 90%;
+  height: 70vh;
+  max-height: 85vh;
+  min-height: 420px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+}
+.itp-history-dialog-lg {
+  max-width: 1100px;
+}
+/* xuechong 2026-10-09 研发BUG-0071 用户复验：操作记录弹窗头恢复主色渐变+白字 */
+.itp-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: -24px -24px 12px -24px;
+  padding: 6px 24px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  border-radius: 8px 8px 0 0;
+}
+.itp-history-header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-right: 100px;
+}
+.itp-history-header h4 {
+  font-size: 16px;
+  margin: 0;
+  color: var(--text-white);
+  font-weight: 600;
+  /* xuechong 2026-10-10 研发BUG-0071 用户复验：标题内 logo 与文字上下居中、左右间隔3px */
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.itp-history-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text-white);
+}
+.itp-history-body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 300px;
+}
+.itp-history-empty-row td {
+  text-align: center;
+  color: #999;
+  padding: 80px 0;
+  vertical-align: middle;
+}
+.itp-history-table-wrap {
+  overflow-x: auto;
+}
+/* xuechong 2026-10-12 研发需求-0178-图档扫描-3.3.05-新增PDF文件重命名与批量下载 */
+/* 转换记录弹框加宽（仅转换记录挂此类，上传记录弹框尺寸不变）：
+   12列表格尽量整屏放下不出横向滚动条；min(1200px,96vw)保证窗口再小也不超出浏览器宽度，
+   极小窗口下仍由上方 overflow-x:auto 兜底出现滚动条（比挤爆布局好） */
+.itp-history-dialog-wide {
+  width: 96%;
+  max-width: min(1200px, 96vw);
+}
+.itp-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.itp-history-table th {
+  background: #f5f7fa;
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+}
+.itp-history-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+}
+.itp-history-table tr.not-downloaded td {
+  color: var(--accent-color);
+}
+.itp-history-table .col-index { width: 50px; text-align: center; }
+.itp-history-table .col-count { width: 60px; text-align: center; }
+.itp-history-table .col-dl-count { width: 70px; text-align: center; }
+.itp-history-table .col-action { width: 60px; text-align: center; }
+/* xuechong 2026-10-12 研发需求-0178-图档扫描-3.3.05-新增PDF文件重命名与批量下载 */
+/* 转换记录行首勾选列（表头全选当前页/行勾选，配合批量下载） */
+.itp-history-table .col-check { width: 36px; text-align: center; }
+.itp-history-table .check-cell { text-align: center; }
+.itp-history-check,
+.itp-history-checkall {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: var(--primary-color, #EA580C);
+}
+.itp-history-table .index-cell { text-align: center; color: #999; }
+.itp-history-table .count-cell { text-align: center; }
+.itp-history-table .dl-count-cell { text-align: center; }
+.itp-history-table .action-cell { text-align: center; }
+.itp-history-table .name-cell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* xuechong 2026-10-12 研发需求-0178-图档扫描-3.3.05-新增PDF文件重命名与批量下载 */
+/* 重命名行内编辑：名称单元格内输入框+确定/取消（编辑态时该行不再省略号截断） */
+.itp-history-table .name-cell .itp-rename-box {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  white-space: normal;
+}
+/* 编辑态单元格本身放宽：name-cell 既有 max-width:200px+overflow:hidden 会把
+   "输入框+确定+取消"整体裁剪（取消按钮显示不全），编辑态临时取消限宽与裁剪 */
+.itp-history-table td.name-cell:has(.itp-rename-box) {
+  max-width: none;
+  overflow: visible;
+}
+.itp-rename-input {
+  flex: 1;
+  min-width: 140px;
+  padding: 3px 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.itp-rename-input:focus {
+  outline: none;
+  border-color: var(--primary-color, #EA580C);
+}
+/* xuechong 2026-10-12 研发需求-0178-图档扫描-3.3.05-新增PDF文件重命名与批量下载 */
+/* 批量下载操作条：表格下方右对齐 */
+.itp-history-batch-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 4px 0 4px;
+}
+.itp-history-table .time-cell {
+  white-space: nowrap;
+  color: #666;
+}
+.itp-history-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  flex-wrap: wrap;
+}
+.itp-history-pagination .page-btn {
+  padding: 4px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+.itp-history-pagination .page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.itp-history-pagination .page-btn:hover:not(:disabled) {
+  background: var(--primary-light-bg, #FFF7ED);
+  border-color: var(--primary-color, #EA580C);
+  color: var(--primary-color, #EA580C);
+}
+.itp-history-pagination .page-info {
+  font-size: 14px;
+  color: #333;
+}
+.itp-history-pagination .page-size-select {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.itp-history-pagination .history-total {
+  font-size: 14px;
+  color: #999;
+}
+.itp-btn-sm {
+  padding: 4px 10px;
+  font-size: 14px;
+}
+.itp-btn-danger {
+  background-color: var(--error-color);
+  color: #fff;
+  border: 1px solid var(--error-color);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.itp-btn-danger:hover {
+  background-color: #B91C1C;
+}
+.itp-btn-edit {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.itp-btn-edit:hover {
+  background-color: #C2410C;
+  border-color: #C2410C;
+}
+
+/* ============================================================
+   自动模式确认弹窗
+   ============================================================ */
+.auto-confirm-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+.auto-confirm-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0 32px 28px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+/* xuechong 2026-10-09 研发BUG-0071 弹框统一：自动模式确认弹窗标题改彩色渐变头（同全站弹框体系） */
+.auto-confirm-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 -32px 12px;
+  padding: 6px 32px;
+  /* xuechong 2026-10-10 研发BUG-0071 用户复验：标题内 logo 与文字上下居中、左右间隔3px */
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(135deg, var(--primary-color, #EA580C) 0%, var(--primary-light, #F97316) 100%);
+  border-radius: 11px 11px 0 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+.auto-confirm-msg {
+  font-size: 14px;
+  color: #4e5969;
+  line-height: 1.7;
+  margin: 12px 0 24px;
+}
+.auto-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.auto-confirm-ok {
+  background: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: #fff !important;
+}
+.auto-confirm-cancel {
+  background: #fff !important;
+  border-color: #d9d9d9 !important;
+  color: #4e5969 !important;
+}
+
+/* xuechong 2026-06-01 上传状态标签样式 */
+.upload-status-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+/* xuechong 2026-10-09 研发BUG-0071 上传状态标签配色并入语义色 */
+.upload-status-uploaded {
+  background: #EFF6FF;
+  color: #1D4ED8;
+}
+.upload-status-processing {
+  background: #FFFBEB;
+  color: #B45309;
+}
+.upload-status-completed {
+  background: #F0FDF4;
+  color: #15803D;
+}
+.upload-status-failed {
+  background: #FEF2F2;
+  color: #B91C1C;
+}
+.upload-status-cancelled {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+/* xuechong 2026-06-01 上传中简易提示 */
+.itp-uploading-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #B45309;
+}
+
+/* ============================================================
+   xuechong 2026-10-09 研发BUG-0071-图档扫描-3.3.01-整体页面优化向商用系统页面看齐
+   深色光晕底上的白面板统一浮起质感：半透明描边+近/远两层投影（与 main.css 卡片规格一致）
+   ============================================================ */
+.itp-file-manager,
+.itp-action-bar,
+.itp-preview-area,
+.itp-progress-bar-container,
+.itp-review-module,
+.itp-ocr-page,
+.itp-generate-page {
+  /* xuechong 2026-10-10 研发BUG-0071 白底下回调：浅描边+灰蓝多层投影+顶受光（立体感增强）；
+     圆角统一10px（与编辑PDF/双层PDF白卡 var(--radius-md) 一致，原各卡自带8px不统一） */
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 20px -4px rgba(16, 24, 40, 0.10), 0 20px 44px -12px rgba(16, 24, 40, 0.16);
+}
+
+/* ============================================================
+   xuechong 2026-10-09 研发BUG-0071-图档扫描-3.3.01-整体页面优化向商用系统页面看齐
+   弹框样式全站统一：确认类小弹框（未保存/删除/还原/批量确认/批量进度/重绘设置）标题
+   统一为彩色渐变头+白字（与版本说明/操作记录/未完成任务/上传弹窗同一体系），
+   弹窗体统一分层投影
+   ============================================================ */
+.itp-unsaved-dialog h4,
+.itp-delete-dialog h4,
+.itp-restore-dialog h4,
+.itp-batch-pdf-dialog h4,
+.itp-batch-progress-dialog h4,
+.itp-redraw-settings-dialog h4 {
+  margin: -24px -24px 12px;
+  padding: 6px 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(135deg, var(--primary-color, #EA580C) 0%, var(--primary-light, #F97316) 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 11px 11px 0 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.itp-unsaved-dialog,
+.itp-delete-dialog,
+.itp-restore-dialog,
+.itp-batch-pdf-dialog,
+.itp-batch-progress-dialog,
+.itp-redraw-settings-dialog,
+.itp-history-dialog {
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.25);
+}

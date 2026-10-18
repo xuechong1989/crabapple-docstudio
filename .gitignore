@@ -1,0 +1,56 @@
+logs/
+tmp/
+temp/
+/dist/
+/frontend/dist/
+venv/
+node_modules/
+target/
+__pycache__/
+*.egg-info/
+.venv/
+.vscode/
+.idea/
+.mimosa/
+.zcode/
+**/resolver-status.properties
+
+# JWT secret (auto-generated, do not commit)
+.jwt_secret
+
+# 本地运行数据与模型缓存
+/data/
+*.log
+*.lastUpdated
+
+# 离线依赖与大体积安装器（请从发布包或官方源获取）
+/assets/linux/wheels/
+/assets/windows/
+
+# 本地配置与密钥材料
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+manifest.json
+
+# 构建与测试产物
+build/
+.pytest_cache/
+.ruff_cache/
+
+# 系统文件
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+*.swo
+*.class
+~$*
+/test_*.png
+/test_*.jpg
+/_test_*

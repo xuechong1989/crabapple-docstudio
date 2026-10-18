@@ -1,0 +1,30 @@
+Crabapple DocStudio（海棠文档工坊）
+Copyright 2024-2026 Crabapple DocStudio contributors
+
+This product includes software developed by third parties. The following
+components are distributed under their respective licenses; see the upstream
+repositories for the full license texts.
+
+AGPL-3.0 components
+-------------------
+- PyMuPDF (Artifex Software) — https://github.com/pymupdf/PyMuPDF
+- Ultralytics YOLO — https://github.com/ultralytics/ultralytics
+- DocLayout-YOLO (OpenDataLab) — https://github.com/opendatalab/DocLayout-YOLO
+- DocLayout-YOLO DocStructBench weights — https://huggingface.co/juliozhao/DocLayout-YOLO-DocStructBench
+
+Apache-2.0 / permissive components
+----------------------------------
+- RapidOCR — https://github.com/RapidAI/RapidOCR
+- OpenCV — https://github.com/opencv/opencv
+- NumPy, Pillow, FastAPI, Uvicorn, ReportLab, Vue.js, Vite and their
+  transitive dependencies are distributed under their respective
+  Apache-2.0 / BSD / MIT licenses.
+
+Fonts
+-----
+- Noto Serif SC subset used for page numbers is licensed under the
+  SIL Open Font License 1.1. See backend/fonts/OFL-License.txt.
+
+The project as a whole is licensed under AGPL-3.0. If you run a modified
+version as a network service, you must offer the corresponding source code
+to the users of that service, as required by the AGPL.

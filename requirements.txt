@@ -1,0 +1,128 @@
+# -*- coding: utf-8 -*-
+# xuechong 2026-08-26 研发BUG-0032-图档扫描-3.1.09-开发环境迁移机制与功能优化
+# 依赖清单加PEP263编码声明：
+# pip 在 GBK 区域的中文 Windows 上无声明时按系统编码解码本文件，UTF-8 中文注释必炸（lenovo迁移机实测）
+# ============================================================
+# Document Scanner - Full dependency list
+# Python: 3.11+
+#
+# All direct + transitive dependencies are listed explicitly
+# to ensure offline cross-platform packaging works correctly.
+# ============================================================
+
+# ============================================================
+# Core dependencies
+# ============================================================
+opencv-python-headless>=4.10.0,<5.0.0
+numpy>=1.26.0,<2.3.0
+Pillow>=10.3.0,<12.0.0
+scipy>=1.12.0,<2.0.0
+
+# ============================================================
+# PyTorch (YOLO inference engine)
+# CPU:  pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+# GPU:  pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+# Note: offline packaging handled by download_offline_deps.py
+# CUDA version: 12.8 (build_openeuler.bat passes --cuda 12.8)
+# All GPU components must match the same CUDA major version (12.x):
+#   torch+cu128, onnxruntime-gpu>=1.19(CUDA12), nvidia-*-cu12
+# ============================================================
+# xuechong 2026-08-06 研发BUG-0016 REQ-013 版本区间与离线包对齐（torch 2.11+cu128 / torchvision 0.26+cu128）
+torch>=2.10.0,<3.0.0
+torchvision>=0.25.0,<1.0.0
+
+# ============================================================
+# YOLO layout detection + transitive deps
+#   doclayout-yolo -> ultralytics -> matplotlib, pandas, seaborn, etc.
+# ============================================================
+doclayout-yolo>=0.0.2,<1.0.0
+ultralytics>=8.2.0,<9.0.0
+huggingface_hub>=0.23.0,<1.0.0
+safetensors>=0.4.0,<1.0.0
+
+# ultralytics/doclayout-yolo transitive deps (must be explicit)
+matplotlib>=3.3.0,<4.0.0
+pandas>=1.1.4,<3.0.0
+seaborn>=0.11.0,<1.0.0
+ultralytics-thop>=2.0.0,<3.0.0
+py-cpuinfo>=8.0.0,<10.0.0
+# xuechong 2026-08-17 研发BUG-0023-图档扫描-3.1.04-一键修图HoughLinesP解包异常 依赖大版本漂移防护：
+# doclayout-yolo 的无上限依赖会在重建 venv 时解析到最新大版本（opencv-python 5.0 覆盖 cv2 后
+# HoughLinesP 返回结构变更导致一键修图崩溃），显式声明传递依赖并锁上限，两处 opencv 同为 4.x 消除双大版本混装
+albumentations>=1.4.11,<3.0.0
+albucore>=0.0.24,<1.0.0
+opencv-python>=4.6.0,<5.0.0
+# xuechong 2026-08-17 crabapple-docstudio Windows约束：stringzilla（doclayout-yolo→albumentations→albucore 链传递依赖）
+# 5.1.2+ 无 cp311 win_amd64 预编译 wheel，pip 源码编译需 MSVC Build Tools；5.1.1 双平台均有 wheel，全局钉死保证环境可复现
+stringzilla==5.1.1
+
+# ============================================================
+# Web service dependencies
+# ============================================================
+fastapi>=0.110.0,<1.0.0
+# xuechong 2026-08-17 研发BUG-0023-图档扫描-3.1.04-一键修图HoughLinesP解包异常 依赖加固补充：
+# app.py 直接 import starlette（StaticFiles/HTTPException），版本不应完全由 fastapi 间接决定，显式锁定大版本
+starlette>=1.0.0,<2.0.0
+uvicorn[standard]>=0.29.0,<1.0.0
+python-multipart>=0.0.9,<1.0.0
+watchdog>=4.0.0,<7.0.0
+websockets>=12.0,<16.0
+aiofiles>=23.0.0,<26.0.0
+
+# ============================================================
+# OCR dependencies
+#   rapidocr -> onnxruntime, pyclipper, Shapely, omegaconf, colorlog, six
+# ============================================================
+# xuechong 2026-08-06 研发BUG-0016 REQ-013 pin rapidocr==3.5.0（内部 API detect_and_crop/cls_and_rotate 非稳定公开 API，升级需回归）
+rapidocr==3.5.0
+# CPU 模式安装 onnxruntime；GPU 模式安装 onnxruntime-gpu（install_offline.sh 二选一，禁止双包共存）
+onnxruntime>=1.19.0,<2.0.0
+
+# rapidocr transitive deps (must be explicit)
+pyclipper>=1.2.0,<2.0.0
+shapely>=1.7.1,<3.0.0
+six>=1.15.0,<2.0.0
+omegaconf>=2.0.0,<3.0.0
+colorlog>=6.0.0,<7.0.0
+
+# onnxruntime transitive deps (must be explicit)
+coloredlogs>=14.0,<16.0
+# xuechong 2026-08-06 研发BUG-0016 REQ-013 版本上限与离线包对齐
+flatbuffers>=1.12,<26.0
+protobuf>=3.20.0,<8.0.0
+
+# GPU-accelerated OCR (optional, recommended):
+#   onnxruntime-gpu replaces onnxruntime, provides CUDAExecutionProvider
+#   Offline packaging: download_offline_deps.py handles this in CUDA mode
+#   start.sh auto-detects GPU and installs at runtime
+#   Version >= 1.19.0 required: 1.19+ builds for CUDA 12.x by default
+#   Versions < 1.19 are CUDA 11 builds, will fail with libcublasLt.so.11 not found
+# xuechong 2026-08-06 研发BUG-0016 REQ-013 GPU 模式安装 onnxruntime-gpu，CPU 模式安装 onnxruntime，禁止双包共存
+# onnxruntime-gpu>=1.19.0
+
+# PaddleOCR (optional, set env DOCSTUDIO_OCR_ENGINE=paddleocr to enable)
+# paddleocr>=2.7.0
+# paddlepaddle>=2.5.0
+
+# ============================================================
+# PDF generation
+# ============================================================
+reportlab>=4.1.0,<5.0.0
+PyMuPDF>=1.24.0,<2.0.0
+
+# ============================================================
+# Common utilities (some are transitive, listed for offline install)
+# ============================================================
+pyyaml>=6.0,<7.0
+requests>=2.31.0,<3.0.0
+typing_extensions>=4.10.0,<5.0.0
+pydantic>=2.6.0,<3.0.0
+tqdm>=4.66.0,<5.0.0
+psutil>=5.9.0,<7.0.0
+
+# ============================================================
+# 可选：form-in 文件库推送（默认关闭，需要时安装）
+# pymongo = MongoDB 云盘存储；pycryptodome = 分块 AES 加密
+# ============================================================
+pymongo>=3.13.0,<4.0.0
+pycryptodome>=3.20.0,<4.0.0

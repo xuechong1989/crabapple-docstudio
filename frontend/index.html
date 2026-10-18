@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 禁用缓存 -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>海棠文档工坊 - Crabapple DocStudio</title>
+  <meta name="app-version" content="3.4.00">
+  <!-- xuechong 2026-10-10 研发BUG-0073-图档扫描-3.3.02-图片转PDF模块漏光净化质量优化 浏览器标签icon换橙红色无文字logo（logo-white为纯白版仅适用深色头，标签页上发白不可见） -->
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <script>
+    // 页面加载时清理可能的缓存问题
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => caches.delete(name));
+      });
+    }
+    // 强制从服务器加载（仅在开发/测试时）
+    if (performance.navigation && performance.navigation.type === 1) {
+      // 这是刷新操作
+    }
+  </script>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
