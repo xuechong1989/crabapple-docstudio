@@ -283,12 +283,12 @@
   width: 14px;
   height: 14px;
   margin: 0;
-  accent-color: var(--primary-color, #EA580C);
+  accent-color: var(--primary-color, #B3123B);
   cursor: pointer;
 }
 .itp-action-bar .itp-page-num-check:hover {
-  border-color: var(--primary-color, #EA580C);
-  color: var(--primary-color, #EA580C);
+  border-color: var(--primary-color, #B3123B);
+  color: var(--primary-color, #B3123B);
 }
 .itp-action-bar .itp-page-num-check:has(input:disabled) {
   opacity: 0.5;
@@ -523,9 +523,9 @@
   transition: all 0.15s ease;
 }
 .itp-nav-btn:hover:not(:disabled) {
-  background: var(--primary-light-bg, #FFF7ED);
-  border-color: var(--primary-color, #EA580C);
-  color: var(--primary-color, #EA580C);
+  background: var(--primary-light-bg, #FFF1F2);
+  border-color: var(--primary-color, #B3123B);
+  color: var(--primary-color, #B3123B);
 }
 .itp-nav-btn:disabled {
   opacity: 0.4;
@@ -630,9 +630,9 @@
   transition: all 0.15s ease;
 }
 .itp-rotate-btn:hover:not(:disabled) {
-  background: var(--primary-light-bg, #FFF7ED);
-  border-color: var(--primary-color, #EA580C);
-  color: var(--primary-color, #EA580C);
+  background: var(--primary-light-bg, #FFF1F2);
+  border-color: var(--primary-color, #B3123B);
+  color: var(--primary-color, #B3123B);
 }
 .itp-rotate-btn:disabled {
   opacity: 0.4;
@@ -658,9 +658,9 @@
   transition: all 0.15s ease;
 }
 .itp-history-btn:hover:not(:disabled) {
-  background: var(--primary-light-bg, #FFF7ED);
-  border-color: var(--primary-color, #EA580C);
-  color: var(--primary-color, #EA580C);
+  background: var(--primary-light-bg, #FFF1F2);
+  border-color: var(--primary-color, #B3123B);
+  color: var(--primary-color, #B3123B);
 }
 .itp-history-btn:disabled {
   opacity: 0.4;
@@ -932,10 +932,10 @@
   transition: width 0.3s ease;
 }
 .itp-progress-fill.animated {
-  background: linear-gradient(90deg, #EA580C, #F97316);
+  background: linear-gradient(90deg, #B3123B, #E63B5F);
 }
 .itp-progress-fill.batch-clean {
-  background: linear-gradient(90deg, #EA580C, #F97316);
+  background: linear-gradient(90deg, #B3123B, #E63B5F);
 }
 .itp-progress-fill.completed {
   background-color: var(--success-color);
@@ -1108,7 +1108,7 @@
   border-color: var(--primary-color);
 }
 .itp-ocr-btn.itp-btn-primary:hover {
-  background-color: #C2410C;
+  background-color: #8E0E2E;
 }
 .itp-ocr-info {
   background: #f5f7fa;
@@ -1538,7 +1538,7 @@
   font-family: inherit;
   color: #fff;
   cursor: pointer;
-  background: linear-gradient(180deg, #F26B1D 0%, var(--primary-color) 55%, #D94E08 100%);
+  background: linear-gradient(180deg, #C9184A 0%, var(--primary-color) 55%, #8E0E2E 100%);
   box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transition: all 0.2s;
 }
@@ -1559,7 +1559,7 @@
   width: 100%;
 }
 .itp-upload-menu-item.active {
-  color: var(--primary-color, #EA580C);
+  color: var(--primary-color, #B3123B);
   font-weight: 600;
 }
 
@@ -1578,7 +1578,7 @@
   bottom: -5px;
   border-radius: 50%;
   border: 2px solid rgba(234, 88, 12, 0.18);
-  border-top-color: #F26B1D;
+  border-top-color: #C9184A;
   border-right-color: rgba(242, 107, 29, 0.55);
   animation: itp-step-spin 0.9s linear infinite;
 }
@@ -1725,7 +1725,7 @@
   width: 15px;
   height: 15px;
   cursor: pointer;
-  accent-color: var(--primary-color, #EA580C);
+  accent-color: var(--primary-color, #B3123B);
 }
 .itp-history-table .index-cell { text-align: center; color: #999; }
 .itp-history-table .count-cell { text-align: center; }
@@ -1761,7 +1761,7 @@
 }
 .itp-rename-input:focus {
   outline: none;
-  border-color: var(--primary-color, #EA580C);
+  border-color: var(--primary-color, #B3123B);
 }
 /* xuechong 2026-10-12 研发需求-0178-图档扫描-3.3.05-新增PDF文件重命名与批量下载 */
 /* 批量下载操作条：表格下方右对齐 */
@@ -1797,9 +1797,9 @@
   cursor: not-allowed;
 }
 .itp-history-pagination .page-btn:hover:not(:disabled) {
-  background: var(--primary-light-bg, #FFF7ED);
-  border-color: var(--primary-color, #EA580C);
-  color: var(--primary-color, #EA580C);
+  background: var(--primary-light-bg, #FFF1F2);
+  border-color: var(--primary-color, #B3123B);
+  color: var(--primary-color, #B3123B);
 }
 .itp-history-pagination .page-info {
   font-size: 14px;
@@ -1837,8 +1837,8 @@
   cursor: pointer;
 }
 .itp-btn-edit:hover {
-  background-color: #C2410C;
-  border-color: #C2410C;
+  background-color: #8E0E2E;
+  border-color: #8E0E2E;
 }
 
 /* ============================================================
@@ -1877,7 +1877,7 @@
   align-items: center;
   gap: 3px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
-    linear-gradient(135deg, var(--primary-color, #EA580C) 0%, var(--primary-light, #F97316) 100%);
+    linear-gradient(135deg, var(--primary-color, #B3123B) 0%, var(--primary-light, #E63B5F) 100%);
   border-radius: 11px 11px 0 0;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
@@ -1981,7 +1981,7 @@
   margin: -24px -24px 12px;
   padding: 6px 24px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
-    linear-gradient(135deg, var(--primary-color, #EA580C) 0%, var(--primary-light, #F97316) 100%);
+    linear-gradient(135deg, var(--primary-color, #B3123B) 0%, var(--primary-light, #E63B5F) 100%);
   color: #fff;
   font-size: 16px;
   font-weight: 600;

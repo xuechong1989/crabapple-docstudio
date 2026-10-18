@@ -178,7 +178,7 @@ const elapsedText = computed(() => {
   justify-content: space-between;
   padding: 6px 24px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
-    linear-gradient(135deg, var(--primary-color, #EA580C) 0%, var(--primary-light, #F97316) 100%);
+    linear-gradient(135deg, var(--primary-color, #B3123B) 0%, var(--primary-light, #E63B5F) 100%);
 }
 .upload-modal-title-row {
   display: flex;
@@ -253,14 +253,14 @@ const elapsedText = computed(() => {
 .upload-modal-progress-percent {
   font-size: 13px;
   font-weight: 600;
-  color: var(--primary-color, #EA580C);
+  color: var(--primary-color, #B3123B);
   min-width: 38px;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 .upload-modal-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #EA580C, #F97316);
+  background: linear-gradient(90deg, #B3123B, #E63B5F);
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -323,13 +323,13 @@ const elapsedText = computed(() => {
   font-weight: 500;
 }
 .upload-modal-btn-primary {
-  background: linear-gradient(180deg, #F26B1D 0%, #EA580C 55%, #D94E08 100%);
+  background: linear-gradient(180deg, #C9184A 0%, #B3123B 55%, #8E0E2E 100%);
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   color: #fff;
   box-shadow: 0 2px 6px rgba(234, 88, 12, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 .upload-modal-btn-primary:hover {
-  background: linear-gradient(180deg, #F97B31 0%, #EA580C 55%, #C2410C 100%);
+  background: linear-gradient(180deg, #E63B5F 0%, #B3123B 55%, #8E0E2E 100%);
   transform: translateY(-1px);
 }
 .upload-modal-btn-danger {
@@ -343,11 +343,11 @@ const elapsedText = computed(() => {
 }
 .upload-modal-btn-cancel {
   background: #fff;
-  color: var(--primary-color, #EA580C);
-  border: 1px solid var(--primary-color, #EA580C);
+  color: var(--primary-color, #B3123B);
+  border: 1px solid var(--primary-color, #B3123B);
 }
 .upload-modal-btn-cancel:hover {
-  background: var(--primary-light-bg, #FFF7ED);
+  background: var(--primary-light-bg, #FFF1F2);
 }
 .upload-modal-elapsed {
   font-size: 12px;

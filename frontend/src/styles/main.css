@@ -7,15 +7,15 @@
    消除此前 main.css(Material系) 与 img-to-pdf.css(Arco系) 两套色板并存的问题；
    变量名全部保留旧名（引用处零改动），取值按新规范更新 */
 :root {
-  /* 主色：品牌橙降饱和（原来同时存在 #E86100/#FF8C42/#C75300/#ff6b35/#ff7f00 五种橙） */
-  --primary-color: #EA580C;
-  --primary-light: #F97316;
-  --primary-dark: #C2410C;
+  /* 主色：海棠红（与 Crabapple 品牌图标统一） */
+  --primary-color: #B3123B;
+  --primary-light: #E63B5F;
+  --primary-dark: #8E0E2E;
   /* 主色浅底：选中行、提示条、图标底 */
-  --primary-light-bg: #FFF7ED;
+  --primary-light-bg: #FFF1F2;
 
   /* 语义色：全站各只此一个（原来蓝有 #2196F3/#0066cc/#165dff/#409eff 四种、绿有三种） */
-  --accent-color: #2563EB;
+  --accent-color: #4F9D69;
   --success-color: #16A34A;
   --warning-color: #D97706;
   --error-color: #DC2626;
@@ -335,7 +335,7 @@ body {
   height: 40px;
   padding: 0 12px;
   box-sizing: border-box;
-  background: linear-gradient(180deg, #F26B1D 0%, var(--primary-color) 55%, #D94E08 100%);
+  background: linear-gradient(180deg, #C9184A 0%, var(--primary-color) 55%, #8E0E2E 100%);
   color: #fff;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
@@ -356,7 +356,7 @@ body {
 }
 
 .itp-upload-label:hover:not(.disabled) {
-  background: linear-gradient(180deg, #F97B31 0%, #EA580C 55%, #C2410C 100%);
+  background: linear-gradient(180deg, #E63B5F 0%, #B3123B 55%, #8E0E2E 100%);
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(234, 88, 12, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
@@ -662,20 +662,20 @@ body {
 
 /* xuechong 2026-10-09 研发BUG-0071 主按钮立体面：顶部亮底部暗的纵向渐变+顶部内高光+底部深边 */
 .btn-primary {
-  background: linear-gradient(180deg, #F26B1D 0%, var(--primary-color) 55%, #D94E08 100%);
+  background: linear-gradient(180deg, #C9184A 0%, var(--primary-color) 55%, #8E0E2E 100%);
   color: var(--text-white);
   box-shadow: 0 2px 6px rgba(234, 88, 12, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #F97B31 0%, #EA580C 55%, #C2410C 100%);
+  background: linear-gradient(180deg, #E63B5F 0%, #B3123B 55%, #8E0E2E 100%);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(234, 88, 12, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .btn-primary:active:not(:disabled) {
-  background: linear-gradient(180deg, #E05509 0%, #C2410C 100%);
+  background: linear-gradient(180deg, #E05509 0%, #8E0E2E 100%);
   transform: translateY(0);
   box-shadow: 0 1px 3px rgba(234, 88, 12, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
@@ -1198,7 +1198,7 @@ body {
   margin: -24px -24px 12px;
   padding: 6px 24px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
-    linear-gradient(135deg, var(--primary-color, #EA580C) 0%, var(--primary-light, #F97316) 100%);
+    linear-gradient(135deg, var(--primary-color, #B3123B) 0%, var(--primary-light, #E63B5F) 100%);
   color: #fff;
   font-size: 16px;
   font-weight: 600;
@@ -3586,7 +3586,7 @@ button.itp-progress-close:hover {
 .card-icon-wrapper.dual-icon,
 .card-icon-wrapper.edit-icon {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 42%),
-    linear-gradient(160deg, var(--primary-light) 0%, var(--primary-color) 60%, #C2410C 100%);
+    linear-gradient(160deg, var(--primary-light) 0%, var(--primary-color) 60%, #8E0E2E 100%);
   border: none;
   color: #fff;
   box-shadow:
@@ -4147,7 +4147,7 @@ button.itp-progress-close:hover {
 /* 编辑PDF一键修图按钮样式 */
 /* xuechong 2026-10-09 研发BUG-0071 两模块风格统一：一键处理=核心动作统一主色（原绿色与图片转PDF"一键修图"橙色不一致） */
 .tool-btn.clean-btn {
-  background: linear-gradient(180deg, #F26B1D 0%, var(--primary-color) 55%, #D94E08 100%);
+  background: linear-gradient(180deg, #C9184A 0%, var(--primary-color) 55%, #8E0E2E 100%);
   color: white;
   border-color: var(--primary-color);
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
@@ -4155,7 +4155,7 @@ button.itp-progress-close:hover {
 }
 
 .tool-btn.clean-btn:hover:not(:disabled) {
-  background: linear-gradient(180deg, #F97B31 0%, #EA580C 55%, #C2410C 100%);
+  background: linear-gradient(180deg, #E63B5F 0%, #B3123B 55%, #8E0E2E 100%);
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(234, 88, 12, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
@@ -4438,7 +4438,7 @@ button.itp-progress-close:hover {
 .itp-history-table .itp-btn-sm:hover {
   border-color: var(--primary-color);
   color: var(--primary-color);
-  background: #FFF7ED;
+  background: #FFF1F2;
 }
 .itp-history-table .itp-btn-sm.itp-btn-danger {
   color: #DC2626;

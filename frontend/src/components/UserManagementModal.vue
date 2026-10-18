@@ -371,8 +371,8 @@ watch(() => props.visible, v => { if (v) loadUsers() })
 .create-field label { font-size:13px;font-weight:600;color:#333; }
 .create-input { padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;outline:none;transition:border-color 0.2s; }
 /* xuechong 2026-10-09 研发BUG-0071 内联旧橙 #ff7f00 并入主色 */
-.create-input:focus { border-color:var(--primary-color,#EA580C);box-shadow:0 0 0 2px rgba(234,88,12,0.1); }
+.create-input:focus { border-color:var(--primary-color,#B3123B);box-shadow:0 0 0 2px rgba(234,88,12,0.1); }
 .create-pwd-row { display:flex;gap:8px;align-items:center; }
 
-.new-pwd-display { padding:16px;margin:12px 0;background:#f5f5f5;border:2px dashed var(--primary-color,#EA580C);border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:var(--primary-color,#EA580C);letter-spacing:2px;font-family:'Courier New',monospace; }
+.new-pwd-display { padding:16px;margin:12px 0;background:#f5f5f5;border:2px dashed var(--primary-color,#B3123B);border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:var(--primary-color,#B3123B);letter-spacing:2px;font-family:'Courier New',monospace; }
 </style>

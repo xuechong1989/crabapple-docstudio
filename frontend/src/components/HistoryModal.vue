@@ -62,7 +62,7 @@
                   <td class="time-cell">{{ item.created_at || item.time || '' }}</td>
                   <td class="dl-count-cell">{{ item.download_count || 0 }}</td>
                   <td class="dl-count-cell">
-                    <span v-if="item.edited" style="color:var(--primary-color, #EA580C);font-weight:600;">已编辑</span>
+                    <span v-if="item.edited" style="color:var(--primary-color, #B3123B);font-weight:600;">已编辑</span>
                     <span v-else style="color:#999;">未编辑</span>
                   </td>
                   <td class="dl-count-cell">{{ item.edit_download_count || 0 }}</td>

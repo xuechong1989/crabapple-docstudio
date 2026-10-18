@@ -2323,11 +2323,11 @@ onUnmounted(() => {
   transition: border-color 0.15s, background 0.15s;
 }
 .edit-pdf-process-dialog .process-option:hover {
-  border-color: var(--primary-color, #EA580C);
+  border-color: var(--primary-color, #B3123B);
 }
 .edit-pdf-process-dialog .process-option.checked {
-  border-color: var(--primary-color, #EA580C);
-  background: var(--primary-light-bg, #FFF7ED);
+  border-color: var(--primary-color, #B3123B);
+  background: var(--primary-light-bg, #FFF1F2);
 }
 .edit-pdf-process-dialog .process-option.disabled {
   opacity: 0.55;
@@ -2342,7 +2342,7 @@ onUnmounted(() => {
   height: 15px;
   margin: 0;
   flex-shrink: 0;
-  accent-color: var(--primary-color, #EA580C);
+  accent-color: var(--primary-color, #B3123B);
   cursor: pointer;
 }
 .edit-pdf-process-dialog .process-option.disabled input[type="checkbox"] {

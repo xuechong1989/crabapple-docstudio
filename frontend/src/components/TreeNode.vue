@@ -99,11 +99,11 @@ function formatSize(bytes) {
 
 /* xuechong 2026-10-09 研发BUG-0071 悬停/选中行配色并入设计令牌（原旧橙渐变） */
 .tree-node:hover {
-  background: var(--primary-light-bg, #FFF7ED);
+  background: var(--primary-light-bg, #FFF1F2);
 }
 
 .tree-node.selected {
-  background: #EA580C;
+  background: #B3123B;
   color: white;
 }
 

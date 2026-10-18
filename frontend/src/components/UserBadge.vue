@@ -86,7 +86,7 @@ function handleLogout() {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-light, #F97316) 0%, var(--primary-color, #EA580C) 100%);
+  background: linear-gradient(135deg, var(--primary-light, #E63B5F) 0%, var(--primary-color, #B3123B) 100%);
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4);
   color: #fff;
   font-size: 13px;
