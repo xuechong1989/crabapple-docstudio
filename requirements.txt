@@ -42,7 +42,7 @@ safetensors>=0.4.0,<1.0.0
 
 # ultralytics/doclayout-yolo transitive deps (must be explicit)
 matplotlib>=3.3.0,<4.0.0
-pandas>=1.1.4,<3.0.0
+pandas>=3.0.6,<4.0.0
 seaborn>=0.11.0,<1.0.0
 ultralytics-thop>=2.0.0,<3.0.0
 py-cpuinfo>=8.0.0,<10.0.0
